@@ -45,4 +45,4 @@ abstract: >-
   HAMP locus), and human hepatocyte transcriptomes from GEO. MIMIC data are access-controlled
   and are not redistributed; the clinical scripts require a local PostgreSQL instance holding
   the MIMIC schemas.
-# doi: 10.5281/zenodo.XXXXXXX
+doi: 10.5281/zenodo.23344838

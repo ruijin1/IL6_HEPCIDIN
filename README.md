@@ -92,8 +92,9 @@ be executed on its own.
 
 ## Citation
 
-If you use this code, please cite the manuscript above and the archived release. Once the Zenodo
-archive is published, the permanent DOI will be listed in `CITATION.cff`.
+If you use this code, please cite the manuscript above and the archived release. The archived
+release is preserved on Zenodo with the permanent DOI `10.5281/zenodo.23344838`, which is also
+listed in `CITATION.cff`.
 
 ## License
 
