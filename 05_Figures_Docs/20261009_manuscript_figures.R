@@ -5,6 +5,10 @@
 #   (R on this machine cannot translate \uXXXX escapes; Chinese paths break ggsave).
 #   * fig2A: model "(4) non-CoNS" was a duplicate of "+ interval and baseline" in the
 #     original script (the exposure was not actually swapped) -> removed in prep.
+#   * italic Latin terms (2026-10-14): cis / in vitro / in vivo are set in italics in the
+#     text, so the figure labels that carry them are rendered through plotmath
+#     (parse = TRUE); box() sub-labels are drawn line-by-line so the 3-line
+#     rhythm is preserved (see LSUB / sub_lines below).
 #   * fig6 systemic arm: "sTfR down" printed the sign the wrong way round for the active
 #     (HAMP-up) arm. Attenuated signalling lowers sTfR (fig4a beta = -0.0263; fig6 supporting
 #     line "lower sTfR/RDW"), so the active arm must read "sTfR up", as iron restriction
@@ -64,26 +68,40 @@ save_fig <- function(p, name, w = 17, h) {
 
 ## ------------------------------------------------------------------ Figure 1
 fig1 <- function() {
-  box <- function(x, y, w, h, lab, sub, fill) list(
+  ## Sub-labels of the schematic boxes are drawn one annotate() per line rather than relying on
+  ## ggplot's internal "\n" layout. That lets a single line be rendered through plotmath
+  ## (parse = TRUE) so it can carry an italic Latin term (cis / in vitro / in vivo) without
+  ## disturbing the three-line rhythm: measured on this device one "\n" step is 9.42 pt at
+  ## size 2.30, i.e. 1.464 data units for a 17 x 16 cm panel with ylim 0-64.
+  LSUB <- 1.464
+  sub_lines <- function(xc, yc, sub, parse = NULL, size = 2.30, colour = "grey20") {
+    v <- strsplit(sub, "\n", fixed = TRUE)[[1]]
+    n <- length(v); if (is.null(parse)) parse <- rep(FALSE, n)
+    off <- (n - 1)/2
+    lapply(seq_len(n), function(k)
+      annotate("text", x = xc, y = yc + (off - (k - 1)) * LSUB,
+               label = v[k], size = size, colour = colour, parse = parse[k]))
+  }
+  box <- function(x, y, w, h, lab, sub, fill, sub_parse = NULL) c(list(
     annotate("rect", xmin = x, xmax = x + w, ymin = y, ymax = y + h, fill = fill, colour = "grey35", linewidth = LW),
-    annotate("text", x = x + w/2, y = y + h*0.70, label = lab, size = 2.9, fontface = "bold"),
-    annotate("text", x = x + w/2, y = y + h*0.30, label = sub, size = 2.30, colour = "grey20"))
+    annotate("text", x = x + w/2, y = y + h*0.70, label = lab, size = 2.9, fontface = "bold")),
+    sub_lines(x + w/2, y + h*0.30, sub, sub_parse))
   ar <- function(x, y0, y1) annotate("segment", x = x, y = y0, xend = x, yend = y1,
                                      arrow = arrow(length = unit(0.12, "cm")), linewidth = LW, colour = "grey45")
   p <- ggplot() + xlim(0, 100) + ylim(0, 64) +
     annotate("text", x = 50, y = 62, size = 3.4, fontface = "bold", label = "Triangulation of three evidence layers") +
     box(1.5, 46, 30, 12, "Clinical", "MIMIC-IV: 17,244 NICU/SCN admissions\nMIMIC-III: 7940 NICU admissions\n8255 blood-culture episodes", "#D6E4F0") +
-    box(35, 46, 30, 12, "Genetic", "FinnGen R12: 5 neonatal endpoints\n15 quantitative lab traits (n 5055-447,271)\ncis-pQTL: IL6R, SAA1/SAA2, CRP", "#E6DED1") +
+    box(35, 46, 30, 12, "Genetic", "FinnGen R12: 5 neonatal endpoints\n15 quantitative lab traits (n 5055-447,271)\nitalic(cis)*'-pQTL: IL6R, SAA1/SAA2, CRP'", "#E6DED1", sub_parse = c(FALSE, FALSE, TRUE)) +
     box(68.5, 46, 30, 12, "Transcriptomic", "6 human hepatocyte systems (GEO)\nIL-6 / LPS / BMAL1 knockdown\n93 genes across five GEO datasets", "#DCEBDC") +
     ar(16.5, 45.7, 40) + ar(50, 45.7, 40) + ar(83.5, 45.7, 40) +
     box(1.5, 28, 30, 11.5, "1. Clinical question", "Does culture-proven infection\nlower bilirubin, and lower MCV /\nMCH (iron-restricted erythropoiesis)?", "#F4F8FC") +
     box(35, 28, 30, 11.5, "2. Genetic instruments", "Does attenuated IL-6 signalling\nraise MCV / MCH / TSAT / bilirubin\nand lower sTfR and RDW?", "#FAF7F2") +
-    box(68.5, 28, 30, 11.5, "3. Hepatic arm", "Does IL-6 suppress hepatic UGT1A1\nin vitro (which would RAISE\nbilirubin)?", "#F6FAF6") +
+    box(68.5, 28, 30, 11.5, "3. Hepatic arm", "Does IL-6 suppress hepatic UGT1A1\nitalic('in vitro')*' (which would RAISE'\nbilirubin)?", "#F6FAF6", sub_parse = c(FALSE, TRUE, FALSE)) +
     annotate("text", x = 50, y = 22.5, size = 3.05, fontface = "bold", label = "Two opposing arms of one pathway") +
     annotate("text", x = 50, y = 18.4, size = 2.45, label = "IL-6 up  ->  hepatic UGT1A1 down   (would raise bilirubin)") +
     annotate("text", x = 50, y = 14.9, size = 2.45, label = "IL-6 up  ->  hepcidin (HAMP) up  ->  iron restriction  ->  less erythropoietic haem turnover   (would lower bilirubin)") +
     annotate("text", x = 50, y = 10.1, size = 3.0, fontface = "bold", colour = "#8C1D18",
-             label = "Net effect in vivo: the erythropoietic arm predominates  ->  bilirubin falls") +
+             label = "bold('Net effect ')*bolditalic('in vivo')*bold(': the erythropoietic arm predominates  ->  bilirubin falls')", parse = TRUE) +
     annotate("text", x = 50, y = 5.8, size = 2.3, colour = "grey25",
              label = "Clinical, genetic and HAMP-locus evidence are concordant; the hepatocyte data reveal the opposing hepatic arm.") +
     annotate("text", x = 50, y = 2.8, size = 2.3, colour = "grey40",
@@ -165,7 +183,7 @@ fig4 <- function() {
     geom_pointrange(aes(xmin = lo, xmax = hi, colour = het), linewidth = LW, size = 0.3) +
     scale_colour_manual(values = c("Homogeneous" = "#B2182B", "Heterogeneous (not interpreted)" = "#9E9E9E"), name = NULL) +
     labs(x = "SD change per SD higher genetically predicted soluble IL-6 receptor", y = NULL, tag = "a",
-         title = "IL6R cis-pQTL: correlation-aware IVW across iron and erythropoiesis traits") +
+         title = expression(bold("IL6R ") * bolditalic(cis) * bold("-pQTL: correlation-aware IVW across iron and erythropoiesis traits"))) +
     th + theme(legend.position = "top")
   h <- G("fig4B_hamp_locus.csv")
   h$trait_en <- factor(h$trait_en, levels = rev(h$trait_en[order(h$neglog10p)]))
@@ -209,15 +227,15 @@ fig6 <- function() {
     annotate("text", x = 50, y = 51.2, size = 2.9, fontface = "bold", label = "IL-6 signalling") +
     annotate("segment", x = 35, y = 51.2, xend = 20, yend = 42, arrow = arrow(length = unit(0.13, "cm")), linewidth = LW, colour = "#2166AC") +
     annotate("rect", xmin = 2, xmax = 31, ymin = 33.5, ymax = 42, fill = "#E8F0F8", colour = "#2166AC", linewidth = LW) +
-    annotate("text", x = 16.5, y = 39.9, size = 2.6, fontface = "bold", colour = "#10467F", label = "Hepatic arm (in vitro)") +
+    annotate("text", x = 16.5, y = 39.9, size = 2.6, fontface = "bold", colour = "#10467F", parse = TRUE, label = "bold('Hepatic arm (')*bolditalic('in vitro')*bold(')')") +
     annotate("text", x = 16.5, y = 36.3, size = 2.3, colour = "grey20", label = "UGT1A1 down (-1.54 to -0.09 in\n5 of 6 systems; absent in Hep3B)") +
     annotate("segment", x = 16.5, y = 33.2, xend = 16.5, yend = 27.5, arrow = arrow(length = unit(0.13, "cm")), linewidth = LW, colour = "#2166AC") +
     annotate("rect", xmin = 2, xmax = 31, ymin = 19.5, ymax = 27.5, fill = "#F7FAFD", colour = "#2166AC", linewidth = LW) +
     annotate("text", x = 16.5, y = 25.4, size = 2.6, fontface = "bold", colour = "#10467F", label = "Would predict bilirubin UP") +
-    annotate("text", x = 16.5, y = 22.0, size = 2.2, colour = "grey30", label = "Not observed in vivo") +
+    annotate("text", x = 16.5, y = 22.0, size = 2.2, colour = "grey30", parse = TRUE, label = "'Not observed '*italic('in vivo')") +
     annotate("segment", x = 65, y = 51.2, xend = 80, yend = 42, arrow = arrow(length = unit(0.13, "cm")), linewidth = LW, colour = "#B2182B") +
     annotate("rect", xmin = 69, xmax = 98, ymin = 33.5, ymax = 42, fill = "#FBE9EA", colour = "#B2182B", linewidth = LW) +
-    annotate("text", x = 83.5, y = 39.9, size = 2.6, fontface = "bold", colour = "#8C1D18", label = "Systemic arm (in vivo)") +
+    annotate("text", x = 83.5, y = 39.9, size = 2.6, fontface = "bold", colour = "#8C1D18", parse = TRUE, label = "bold('Systemic arm (')*bolditalic('in vivo')*bold(')')") +
     annotate("text", x = 83.5, y = 36.3, size = 2.3, colour = "grey20", label = "HAMP up -> iron restriction ->\nMCV/MCH down, RDW up, sTfR up") +
     annotate("segment", x = 83.5, y = 33.2, xend = 83.5, yend = 27.5, arrow = arrow(length = unit(0.13, "cm")), linewidth = LW, colour = "#B2182B") +
     annotate("rect", xmin = 69, xmax = 98, ymin = 19.5, ymax = 27.5, fill = "#FDF5F5", colour = "#B2182B", linewidth = LW) +
@@ -225,7 +243,7 @@ fig6 <- function() {
     annotate("text", x = 83.5, y = 22.0, size = 2.2, colour = "grey30", label = "MIMIC-IV -0.355 log units;\nMIMIC-III -1.07 mg/dL") +
     annotate("text", x = 50, y = 14.2, size = 2.5, fontface = "bold", label = "Supporting evidence") +
     annotate("text", x = 50, y = 10.6, size = 2.25, colour = "grey20", label = "Clinical: culture-proven infection -> lower bilirubin (MIMIC-IV and MIMIC-III) and lower MCV/MCH, robust to transfusion adjustment") +
-    annotate("text", x = 50, y = 7.6, size = 2.25, colour = "grey20", label = "Genetic: IL6R cis-pQTL -> higher MCV/MCH/TSAT/bilirubin, lower sTfR/RDW; HAMP locus independently associated (MCH p = 1.7e-17)") +
+    annotate("text", x = 50, y = 7.6, size = 2.25, colour = "grey20", parse = TRUE, label = "'Genetic: IL6R '*italic(cis)*'-pQTL -> higher MCV/MCH/TSAT/bilirubin, lower sTfR/RDW; HAMP locus independently associated (MCH p = 1.7e-17)'") +
     annotate("text", x = 50, y = 4.6, size = 2.25, colour = "grey20", label = "Transcriptomic: IL-6 suppresses UGT1A1 in primary human hepatocytes and dHepaRG (the hepatic arm, opposite direction)") +
     theme_void() + th_void
   save_fig(p, "Figure6_two_arm_model", 17, 16)

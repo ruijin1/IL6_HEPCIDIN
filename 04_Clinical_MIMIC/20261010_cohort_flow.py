@@ -5,7 +5,12 @@ MIMIC-IV step by step:
   (1) NICU/SCN admissions
   (2) of which those with >=1 total bilirubin
   (3) restricted to the "culture-positive" vs "no infection exposure" groups, with an APR-DRG weight band -> the fully adjusted model sample
-     (model: log(bilirubin) ~ infection + postnatal age + weight band, HC3; also reports the beta after standardising log-bilirubin, i.e. the SD units reported in the manuscript)
+     (model: log(bilirubin) ~ infection + postnatal age + weight band, HC3)
+  (4) the structure of that sample (measurements / admissions / infants), and the same model re-estimated
+     with standard errors clustered by admission and by infant -- an infant contributes on average 2.3
+     measurements, so HC3 (robust to heteroscedasticity) does not by itself allow for the correlation
+     between repeated measurements of the same infant
+  (5) sex of the two compared groups
 
 MIMIC-III step by step (from the packaged nicu_base.csv / nicu_culture.csv, no database needed)
 
@@ -44,7 +49,7 @@ con.autocommit = True
 q = lambda s: pd.read_sql(s, con)
 
 # (1) Cohort
-adm = q("SELECT hadm_id FROM work.nicu_adm WHERE in_nicu OR in_scn")
+adm = q("SELECT hadm_id, subject_id FROM work.nicu_adm WHERE in_nicu OR in_scn")
 rows.append(('MIMIC-IV', 'NICU/SCN admissions', len(adm), 'work.nicu_adm WHERE in_nicu OR in_scn', 'PostgreSQL mimiciv10'))
 
 # (2) Bilirubin records
@@ -88,7 +93,7 @@ df = adm[adm.hadm_id.isin(set(bili.hadm_id))].copy()
 df['bc_pos'] = df.hadm_id.isin(pos)
 df['bc_sent'] = df.hadm_id.isin(sent)
 df['abx_days'] = df.hadm_id.map(abx)
-b = bili.merge(df[['hadm_id', 'bc_pos', 'bc_sent', 'abx_days']], on='hadm_id', how='inner')
+b = bili.merge(df[['hadm_id', 'subject_id', 'bc_pos', 'bc_sent', 'abx_days']], on='hadm_id', how='inner')
 b['group'] = np.where(b.bc_pos, 'pos',
                       np.where(~b.bc_sent & (b.abx_days.isna() | (b.abx_days == 0)), 'no_infection', 'other'))
 n_pos = b[b.group == 'pos'].hadm_id.nunique()
@@ -120,6 +125,48 @@ for spec, lab, need in [('logb ~ infect', 'A infection only', ['logb', 'age_d'])
                  'PostgreSQL mimiciv10'))
     print('  [model %s] n=%d  beta(log)=%+.4f  SE=%.4f  p=%.3g' % (
         lab, int(r.nobs), r.params['infect'], r.bse['infect'], r.pvalues['infect']))
+
+# ---- (4) Sample structure and cluster-robust sensitivity for the fully adjusted model ----
+# The fully adjusted model is fitted at the level of the individual measurement, so an infant
+# contributes on average 2.3 records. HC3 standard errors are robust to heteroscedasticity but
+# not to the correlation between repeated measurements of the same infant; the models below
+# therefore re-estimate model C with standard errors clustered by admission and by infant.
+SPEC_C = 'logb ~ infect + age_d + bw_rank'
+dc = m.dropna(subset=['logb', 'age_d', 'bw_rank'])
+n_adm, n_inf = int(dc.hadm_id.nunique()), int(dc.subject_id.nunique())
+print()
+print('  [sample] %d measurements from %d admissions (%d infants); %.2f measurements per admission'
+      % (len(dc), n_adm, n_inf, len(dc) / n_adm))
+rows.append(('MIMIC-IV', 'admissions contributing to the fully adjusted model', n_adm,
+             '%d measurements from %d infants (%.2f measurements per admission)'
+             % (len(dc), n_inf, len(dc) / n_adm), 'PostgreSQL mimiciv10'))
+
+print('  [sensitivity] model C with standard errors clustered by admission / by infant')
+for grp, lab in [('hadm_id', 'admission'), ('subject_id', 'infant')]:
+    rc = smf.ols(SPEC_C, data=dc).fit(cov_type='cluster', cov_kwds={'groups': dc[grp]})
+    ci = rc.conf_int().loc['infect']
+    print('  [cluster by %-8s] n=%d  beta(log)=%+.4f  SE=%.4f  95%% CI %+.4f to %+.4f  p=%.3g'
+          % (lab, int(rc.nobs), rc.params['infect'], rc.bse['infect'], ci[0], ci[1],
+             rc.pvalues['infect']))
+    rows.append(('MIMIC-IV', 'model C with standard errors clustered by %s' % lab, int(rc.nobs),
+                 'log-scale beta %+.4f (SE %.4f, 95%% CI %+.4f to %+.4f, p=%.3g)'
+                 % (rc.params['infect'], rc.bse['infect'], ci[0], ci[1], rc.pvalues['infect']),
+                 'PostgreSQL mimiciv10'))
+
+# ---- (5) Sex of the two compared groups ---------------------------------------------------
+# MIMIC-IV ships the patient table as hosp.patients; this instance keeps it alongside the other
+# core tables, so the schema is resolved from information_schema rather than hard-coded.
+pat_tbl = q("""SELECT table_schema || '.' || table_name AS t FROM information_schema.tables
+               WHERE table_name = 'patients'""").t.iloc[0]
+pat = q('SELECT subject_id, gender FROM %s' % pat_tbl)
+sa = adm.merge(pat, on='subject_id', how='left')
+sa = sa[sa.hadm_id.isin(set(g.hadm_id))]
+nM, nF = int((sa.gender == 'M').sum()), int((sa.gender == 'F').sum())
+print('  [sex] two compared groups (n=%d): male %d (%.1f%%), female %d (%.1f%%)'
+      % (len(sa), nM, 100.0 * nM / len(sa), nF, 100.0 * nF / len(sa)))
+rows.append(('MIMIC-IV', 'sex of the two compared groups', len(sa),
+             'male %d (%.1f%%), female %d (%.1f%%)' % (nM, 100.0 * nM / len(sa), nF, 100.0 * nF / len(sa)),
+             '%s.gender' % pat_tbl))
 con.close()
 
 # ============================ MIMIC-III ============================
