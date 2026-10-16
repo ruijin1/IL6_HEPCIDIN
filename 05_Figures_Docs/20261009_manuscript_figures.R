@@ -191,7 +191,7 @@ fig4 <- function() {
     geom_col(fill = "#67A9CF", width = 0.68) +
     geom_vline(xintercept = -log10(5e-8), linetype = 2, colour = "#B2182B", linewidth = LW) +
     geom_text(aes(label = sprintf("%.1e", p)), hjust = -0.18, size = 2.0, colour = "grey25") +
-    labs(x = "minus log10 minimum p in the HAMP region (chr19:35.1-35.4 Mb, GRCh38)", y = NULL, tag = "b",
+    labs(x = "minus log10 minimum p in the HAMP region (chr19:35.59-35.89 Mb, hg19)", y = NULL, tag = "b",
          title = "The HAMP locus itself, independent of the IL6R instruments") +
     coord_cartesian(xlim = c(0, 20)) + th
   save_fig(pA / pB + plot_layout(heights = c(1.3, 1)), "Figure4_genetic_evidence", 17, 17)

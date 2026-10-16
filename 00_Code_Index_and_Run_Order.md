@@ -2,7 +2,7 @@
 
 **Project**: IL-6 / hepcidin / bilirubin triangulation (clinical database x transcriptome x Mendelian randomization)
 **Packaging date**: 2026-10-09
-**Script count**: 51 (Python **45** + R **6**), divided into 5 groups by analysis layer
+**Script count**: 52 (Python **46** + R **6**), divided into 5 groups by analysis layer
 
 > This is the English translation of `03_Code_EN/00_Code_Index_and_Run_Order.md` (original Chinese version preserved unchanged). Local working directories were renamed to ASCII equivalents for public release; no analysis logic or numeric value was altered.
 
@@ -169,6 +169,7 @@
 | `20261009_mimic_nicu_bilirubin_phototherapy_robust.py` | * **Phototherapy confounding** control | Phototherapy rate 61.5% vs 60.5% (1.0x) => phototherapy is not a confounder in MIMIC-III |
 | **`20261010_cohort_flow.py`** (new) | * **Cohort-flow recomputation and audit trail**: connect to the MIMIC-IV database to recompute 17,244 -> 16,623 -> two groups 3,562 -> models A/B/C (8,968 / 8,968 / **7,803**, β(log) -0.3549, SE 0.0219, p 6.06e-59); also reports the structure of the fully adjusted sample (**7,803 measurements from 3,375 admissions in 3,354 infants, 2.31 measurements per admission**) and re-estimates model C with **standard errors clustered by admission and by infant** (-0.3549, 95% CI -0.4282 to -0.2817, p 2.19e-21; -0.4284 to -0.2815, p 2.78e-21), plus the sex of the two compared groups (51.5% male); and recompute the full MIMIC-III pipeline from the already packaged CSVs | Outputs `cohort_flow.csv`; the 17,244 and 7,803 that previously existed only in the exploration records can now be recomputed from within the package |
 | **`20261010_make_tables.py`** (new) | * **Table 1 / Table 2 generation and cell-by-cell verification**: rebuild the two main-text tables from `D_bilirubin_phototherapy_robust.csv`, `D_bilirubin_pairs.csv`, `C_transfusion_robust_results.csv`, and compare them cell by cell against the tables in the manuscript docx | Outputs `table1_source_values.csv` / `table2_source_values.csv`; verification result **0 cells differ** |
+| **`20261015_culture_to_index_interval.py`** (new) | * **Culture-to-measurement interval (the X quoted in the Discussion)**: reproduces the analysis sample exactly (n = 710; 107 any-positive, 42 definite non-CoNS), then anchors the index measurement on clinical time — the median chronological time of the days 3-14 window measurements obtained after the first definite-pathogen culture — and subtracts the culture collection time | Outputs `culture_to_index_interval_definite.csv`; **22 of 42** admissions had at least one post-culture measurement inside the window, median interval **2.5 days** (IQR 1.7-3.2, range 0.5-12.7). Robust to analytic choices: all definite episodes 2.3 d, mean instead of median 2.6 d, four reported indices only 2.5 d |
 
 ---
 
