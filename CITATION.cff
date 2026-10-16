@@ -22,7 +22,7 @@ authors:
 version: "1.0.2"
 date-released: "2026-10-16"
 license: MIT
-repository-code: "https://github.com/ruijin1/IL6_HEPICIDIN"
+repository-code: "https://github.com/ruijin1/IL6_HEPCIDIN"
 keywords:
   - Mendelian randomisation
   - colocalisation
