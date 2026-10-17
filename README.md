@@ -5,7 +5,7 @@ Code accompanying the manuscript:
 > **IL-6 signalling, hepcidin-mediated iron restriction and neonatal bilirubin metabolism: a triangulation of clinical, Mendelian randomisation and transcriptomic evidence**
 > Rui Jin, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
-This repository holds 53 scripts (47 Python, 6 R) that reproduce every number, table and figure
+This repository holds 54 scripts (48 Python, 6 R) that reproduce every number, table and figure
 reported in the manuscript, across three evidence layers: two neonatal clinical cohorts
 (MIMIC-IV v1.0 and MIMIC-III v1.4), genetic analyses (Mendelian randomisation and colocalisation
 for IL6R and the HAMP locus), and human hepatocyte transcriptomes from GEO.
@@ -24,7 +24,7 @@ table that maps each number in the manuscript to the script and result file that
 | `01_MR_Genetics` | 16 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
 | `02_Colocalization` | 5 Python, 5 R | Regional data and LD matrices; `coloc.abf` with allele harmonisation and dual windows; SuSiE-based colocalisation |
 | `03_Mechanism_GEO` | 14 Python | Search, download, verification and analysis of the human hepatocyte transcriptomic series, including circadian and replication analyses |
-| `04_Clinical_MIMIC` | 10 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
+| `04_Clinical_MIMIC` | 11 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
 | `05_Figures_Docs` | 2 Python, 1 R | Figure data preparation, all six manuscript figures, and the Markdown-to-Word converter |
 
 ### Superseded and exploratory scripts

@@ -6,7 +6,8 @@ and no audit trail. This script **regenerates both tables from the source data**
 with the tables in the manuscript docx, reporting any differences.
 
 Source data
-  Table 1  D_bilirubin_phototherapy_robust.csv (7 models)
+  Table 1  D_bilirubin_phototherapy_robust.csv (7 models: phototherapy layer)
+           + E_bilirubin_transfusion_robust.csv (4 models: transfusion layer)
            + D_bilirubin_pairs.csv (pairs and positive count for the "never phototherapy (ICD-9)" subset)
   Table 2  C_transfusion_robust_results.csv (32 rows = 4 indices x 2 exposures x 4 models)
 
@@ -67,6 +68,7 @@ def load(f):
     return list(csv.DictReader(io.open(os.path.join(CL, f), encoding='utf-8-sig')))
 
 D = load('D_bilirubin_phototherapy_robust.csv')
+E = load('E_bilirubin_transfusion_robust.csv')
 PAIRS = load('D_bilirubin_pairs.csv')
 C = [r for r in csv.DictReader(io.open(os.path.join(CL, 'C_transfusion_robust_results.csv'), encoding='utf-8-sig'))]
 
@@ -80,6 +82,20 @@ def drow(label):
         if r['model'] == label:
             return r
     raise KeyError(label)
+
+def erow(label):
+    for r in E:
+        if r['model'] == label:
+            return r
+    raise KeyError(label)
+
+# Transfusion layer of Table 1: (manuscript label, label used in E_bilirubin_transfusion_robust.csv)
+TX_ROWS1 = [
+    ('+ adjusted for transfusion (any source)',   '(1) + adjusted for transfusion (any source)'),
+    ('+ adjusted for transfusion in window',      '(2) + adjusted for transfusion in window'),
+    ('Restricted to no transfusion in window',    '(3) no transfusion in window only'),
+    ('Restricted to admissions never transfused', '(4) never transfused (any source) only'),
+]
 
 def crow(outcome, exposure, model):
     for r in C:
@@ -122,6 +138,11 @@ for label_en, label_src in ROWS1:
         t1.append(['Restricted to admissions never receiving phototherapy (ICD-9)',
                    '%d (%d)' % (len(sub), nc), 'not estimable (too few cases)',
                    '\u2014', '\u2014', '0'])
+        for label_en, label_src in TX_ROWS1:      # transfusion layer follows the phototherapy layer
+            r = erow(label_src)
+            t1.append([label_en, '%s (%s)' % (r['n'], r['ncase']), f2(r['b']),
+                       '%s to %s' % (f2(r['lo']), f2(r['hi'])), fpm(r['p']),
+                       r['estimable'] if 'estimable' in r else '1'])
         continue
     r = drow(label_src)
     t1.append([label_en, '%s (%s)' % (r['n'], r['ncase']), f2(r['b']),

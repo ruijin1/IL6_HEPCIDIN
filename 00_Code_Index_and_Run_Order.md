@@ -157,7 +157,7 @@
 
 ---
 
-## Group 4: `04_Clinical_MIMIC` (10)
+## Group 4: `04_Clinical_MIMIC` (11)
 
 | Script | Function | Key Result |
 |---|---|---|
@@ -171,6 +171,7 @@
 | **`20261010_make_tables.py`** (new) | * **Table 1 / Table 2 generation and cell-by-cell verification**: rebuild the two main-text tables from `D_bilirubin_phototherapy_robust.csv`, `D_bilirubin_pairs.csv`, `C_transfusion_robust_results.csv`, and compare them cell by cell against the tables in the manuscript docx | Outputs `table1_source_values.csv` / `table2_source_values.csv`; verification result **0 cells differ** |
 | **`20261015_culture_to_index_interval.py`** (new) | * **Culture-to-measurement interval (the X quoted in the Discussion)**: reproduces the analysis sample exactly (n = 710; 107 any-positive, 42 definite non-CoNS), then anchors the index measurement on clinical time — the median chronological time of the days 3-14 window measurements obtained after the first definite-pathogen culture — and subtracts the culture collection time | Outputs `culture_to_index_interval_definite.csv`; **22 of 42** admissions had at least one post-culture measurement inside the window, median interval **2.5 days** (IQR 1.7-3.2, range 0.5-12.7). Robust to analytic choices: all definite episodes 2.3 d, mean instead of median 2.6 d, four reported indices only 2.5 d |
 | **`20261016_aprdrg_severity_sensitivity.py`** (new) | * **Severity-of-illness sensitivity analysis**: refits the published MIMIC-IV model with the APR-DRG severity-of-illness and risk-of-mortality subclasses (read from the same `hosp.drgcodes` APR row that supplies the birth-weight band, so no extra extraction is needed), restricts to the less severely ill strata, refits across specifications that differ in measurement density, and reports the E-value of the primary estimate | Outputs `aprdrg_severity_sensitivity.csv`; adding severity moves the estimate only from -0.355 to **-0.312** (27% lower, p 2x10-14), and severity subclasses 1-2 still give **-0.191** (17% lower, p 0.019) on 32 exposed admissions; E-value **2.2**; reproduces the published sample exactly (7,803 / 3,375 / 3,354) |
+| **`20261017_bilirubin_transfusion_robust.py`** (new) | * **Transfusion confounding for the within-subject bilirubin outcome** — previously handled only for the erythrocyte indices. Rebuilds the 728 culture-anchored pairs and verifies them row by row against `D_bilirubin_pairs.csv`, then layers transfusion in as adjustment (any transfusion during the admission; transfusion inside the −48 h/+72 h window) and as restriction (no transfusion in the window; never transfused). Estimates are OLS with HC3 robust standard errors, the same specification as the phototherapy script | Outputs `E_bilirubin_transfusion_robust.csv` (7 models) and `E_bilirubin_pairs_transfusion.csv`; the difference is attenuated from **−1.07 to −0.89 mg/dL** (95% CI −1.45 to −0.33, p 0.0018) but survives every layer: **−0.99** (−1.70 to −0.29, p 0.0057, 531 pairs, 32 positive) with no transfusion in the window and **−1.23** (−2.18 to −0.29, p 0.011, 389 pairs, 21 positive) among never-transfused admissions. Transfusion is more frequent after a positive culture (68% vs 44%; 51% vs 25% within the window). The rebuild reproduces the published pairs to 8.9e-16 and the published main estimate (−1.0654) exactly |
 
 ---
 
@@ -223,6 +224,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
 | MCV -4.82 fL, MCH -1.65 pg (definite pathogen, n=710/42) | `A_crosssection_results.csv` (row `positive blood culture (non-CoNS)`) |
 | Dose-response (**unified to the primary-analysis sample n=710, groups 603 / 78 / 29**): Hct 42.78 / 39.98 / 37.33%; MCV 104.39/103.49/100.96; MCH 35.59/35.18/34.14; RDW 18.32/18.74/19.29 | `fig3B_iron_dose.csv` (see item 6 of "Points of Caution") |
 | All three transfusion robustness versions held | `C_transfusion_robust_results.csv` (32 rows = 4 metrics x 2 exposures x 4 models) |
+| Table 1 transfusion rows: −0.89 (−1.45, −0.33) p=0.0018 adjusting for any transfusion; −0.93 adjusting within the window; −0.99 (−1.70, −0.29) p=0.0057 with no transfusion in the window (531 pairs, 32 positive); −1.23 (−2.18, −0.29) p=0.011 never transfused (389 pairs, 21 positive) | `E_bilirubin_transfusion_robust.csv` |
 | Genetics: MCH +0.0209, MCV +0.0183, RDW -0.0139, sTfR -0.0263, TSAT +0.0135, total bilirubin +0.0074; Cochran Q p 0.09-0.83; heterogeneity 0.013/0.036/0.0018/0.00097 | `fig4A_genetic_forest.csv` (contains Q and Q_p columns) |
 | HAMP locus MCH p=1.7e-17 | `fig4B_hamp_locus.csv` |
 | Colocalization narrow-window PP.H4: MCH 0.989, RDW 0.990, MCV 0.934, MCHC 0.973, PLT 0.988; RBC/RETIC/MRV 0.013/0.009/0.015 | `02_Colocalization/coloc_abf_final_summary.csv` (whole-region values also given) |
@@ -247,7 +249,8 @@ the table below lists the key correspondences (for use by reviewers or reproduce
    (the `sun*` file is actually INTERVAL, N=3,301, **not** deCODE). The file names are historical legacy; they were **not renamed** to avoid breaking script references;
    the manuscript and references always use the official years.
 3. **Generation scripts for Table 1 / Table 2 have since been added (2026-10-10)**: `20261010_make_tables.py` rebuilds
-   the two tables from `D_bilirubin_phototherapy_robust.csv`, `D_bilirubin_pairs.csv`, `C_transfusion_robust_results.csv` and
+   the two tables from `D_bilirubin_phototherapy_robust.csv`, `D_bilirubin_pairs.csv`, `C_transfusion_robust_results.csv`,
+   `E_bilirubin_transfusion_robust.csv` and
    **compares them cell by cell with the manuscript docx, with 0 cells differing**.
    It also incidentally found and corrected one **double-rounding** error: for the Hct (Any positive, Main) p-value in Table 2, the source data are 0.02648,
    which the manuscript had written as 0.027; the correct value is **0.026**.
