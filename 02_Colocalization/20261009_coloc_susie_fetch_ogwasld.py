@@ -20,12 +20,14 @@ Outputs: under coloc_ogwasld/
   exp_*.csv / out_*.csv   regional summary statistics per dataset (rsid, chr, position, ea, nea, eaf, beta, se, p, n)
   ld_matrix.csv + ld_snplist.json  LD correlation matrix of the intersecting variants
   pairs.json              the columns to run for each pair
-The token is read from %TEMP%\ogwas_token2.txt and **is never written to disk in the workspace**.
+The token is read from the `OGWAS_JWT` environment variable and **is never written to disk in the workspace**.
 """
 import os, sys, json, time, csv, urllib.request, urllib.error
 sys.stdout.reconfigure(encoding="utf-8")
 
-TOK = open(r"C:\Users\44937\AppData\Local\Temp\ogwas_token2.txt", encoding="utf-8").read().strip()
+TOK = os.environ.get("OGWAS_JWT", "").strip()
+if not TOK:
+    raise SystemExit("!! OGWAS_JWT environment variable not set")
 DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\coloc_ogwasld"
 os.makedirs(DIR, exist_ok=True)
 LOG = os.path.join(DIR, "_fetch.log")

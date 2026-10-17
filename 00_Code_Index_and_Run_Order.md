@@ -14,7 +14,7 @@
 
 | Component | Version / Location |
 |---|---|
-| Python | 3.13.12 (`C:\Users\44937\.workbuddy\binaries\python\envs\default\Scripts\python.exe`) |
+| Python | 3.13.12 (any standard CPython 3.13 installation) |
 | Python dependencies | pandas, numpy, scipy, statsmodels, psycopg2, Pillow, urllib (standard library) |
 | R | 4.4.3 (`D:\R&Rstudio\R-4.4.3\bin\x64\Rscript.exe`) |
 | R packages | **coloc 5.2.3**, **susieR 0.14.2**, ggplot2, dplyr, patchwork, scales, tidyr |
