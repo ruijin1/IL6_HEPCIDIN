@@ -150,24 +150,15 @@ for label_en, label_src in ROWS1:
                r['estimable'] if 'estimable' in r else '1'])
 
 # ---------------- Table 2 ----------------
-ROWS2 = [
-    ('MCV (fL)', 'mcv',     'pos_noncons', 'Main (all)',            'Main'),
-    ('MCV (fL)', 'mcv',     'pos_noncons', '(1) adjusted for transfusion',            '+ adjusted for transfusion'),
-    ('MCV (fL)', 'mcv',     'pos_noncons', '(2) never transfused only',            'Never transfused only'),
-    ('MCV (fL)', 'mcv(preTx)', 'pos_noncons', '(3) pre-transfusion measurements only',      'Pre-transfusion measurements only'),
-    ('MCH (pg)', 'mch',     'pos_noncons', 'Main (all)',            'Main'),
-    ('MCH (pg)', 'mch',     'pos_noncons', '(1) adjusted for transfusion',            '+ adjusted for transfusion'),
-    ('MCH (pg)', 'mch',     'pos_noncons', '(2) never transfused only',            'Never transfused only'),
-    ('MCH (pg)', 'mch(preTx)', 'pos_noncons', '(3) pre-transfusion measurements only',      'Pre-transfusion measurements only'),
-    ('MCV (fL)', 'mcv',     'pos_blood',   'Main (all)',            'Main'),
-    ('MCV (fL)', 'mcv',     'pos_blood',   '(1) adjusted for transfusion',            '+ adjusted for transfusion'),
-    ('MCH (pg)', 'mch',     'pos_blood',   'Main (all)',            'Main'),
-    ('MCH (pg)', 'mch',     'pos_blood',   '(1) adjusted for transfusion',            '+ adjusted for transfusion'),
-    ('RDW (%)',  'rdw',     'pos_noncons', 'Main (all)',            'Main'),
-    ('RDW (%)',  'rdw(preTx)', 'pos_noncons', '(3) pre-transfusion measurements only',      'Pre-transfusion measurements only'),
-    ('Hct (%)',  'hct',     'pos_blood',   'Main (all)',            'Main'),
-    ('Hct (%)',  'hct',     'pos_blood',   '(1) adjusted for transfusion',            '+ adjusted for transfusion'),
-]
+ROWS2 = []
+for _out_en, _key in [('MCV (fL)', 'mcv'), ('MCH (pg)', 'mch'),
+                      ('RDW (%)', 'rdw'), ('Haematocrit (%)', 'hct')]:
+    for _exp in ['pos_noncons', 'pos_blood']:
+        for _src, _en, _suffix in [('Main (all)', 'Main', ''),
+                                   ('(1) adjusted for transfusion', '+ adjusted for transfusion', ''),
+                                   ('(2) never transfused only', 'Never transfused only', ''),
+                                   ('(3) pre-transfusion measurements only', 'Pre-transfusion measurements only', '(preTx)')]:
+            ROWS2.append((_out_en, _key + _suffix, _exp, _src, _en))
 t2 = []
 for out_en, out_key, exp_key, model_src, model_en in ROWS2:
     r = crow(out_key, exp_key, model_src)
