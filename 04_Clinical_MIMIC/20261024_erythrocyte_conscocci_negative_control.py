@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 r"""MIMIC-III NICU: erythrocyte indices by pathogen class (CoNS-only vs definite pathogen vs none).
 
-Added for the BMC Pediatrics resubmission, as a companion to the bilirubin negative-control analysis.
+Added during revision of the manuscript, as a companion to the bilirubin negative-control analysis.
 Cross-sectional design identical to 20261009_mimic_nicu_iron_analysis.py (Design A):
   mean of each index over postnatal days 3-14 per admission, adjusted for birth weight and mean postnatal age,
   OLS with HC3 robust standard errors.

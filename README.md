@@ -2,7 +2,7 @@
 
 Code accompanying the manuscript:
 
-> **Culture-proven infection is associated with lower total serum bilirubin in neonates: concordant clinical, genetic and transcriptomic evidence for opposing hepatic and systemic arms of IL-6 signalling**
+> **Culture-proven infection is associated with lower total serum bilirubin in neonates: a retrospective cohort study with genetic and transcriptomic triangulation**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
 This repository holds 58 scripts (51 Python, 7 R) that reproduce every number, table and figure
@@ -24,7 +24,7 @@ table that maps each number in the manuscript to the script and result file that
 | `01_MR_Genetics` | 16 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
 | `02_Colocalization` | 5 Python, 5 R | Regional data and LD matrices; `coloc.abf` with allele harmonisation and dual windows; SuSiE-based colocalisation |
 | `03_Mechanism_GEO` | 14 Python | Search, download, verification and analysis of the human hepatocyte transcriptomic series, including circadian and replication analyses |
-| `04_Clinical_MIMIC` | 11 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
+| `04_Clinical_MIMIC` | 14 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
 | `05_Figures_Docs` | 2 Python, 2 R, 7 CSV | Figure data preparation, all six manuscript figures, the plotting input data for Figures 2-5, and the Markdown-to-Word converter |
 
 ### Superseded and exploratory scripts
@@ -57,8 +57,10 @@ No patient-level or primary data are redistributed in this repository.
 | GWAS Catalog, Ensembl REST | Public |
 
 Because MIMIC data are access-controlled, the clinical scripts in `04_Clinical_MIMIC` require a
-local PostgreSQL instance loaded with the MIMIC-III and MIMIC-IV schemas. The path to that
-instance is configured at the top of each script.
+local PostgreSQL instance loaded with the MIMIC-III and MIMIC-IV schemas. The connection
+parameters (host, port, user, password, database) are defined in each script; the password is a
+placeholder for a local development instance and must be replaced with your own configuration
+before running. No credential in this repository grants access to any MIMIC data.
 
 ## Environment
 
@@ -67,8 +69,8 @@ instance is configured at the top of each script.
 | Python | 3.13 |
 | Python packages | numpy, pandas, scipy, statsmodels, psycopg2, python-docx, Pillow |
 | R | 4.4.3 |
-| R packages | coloc 5.2.3, susieR, ggplot2, dplyr, patchwork, scales, tidyr |
-| Database | local PostgreSQL holding the MIMIC-III and MIMIC-IV schemas |
+| R packages | coloc 5.2.3, susieR 0.14.2, ggplot2, dplyr, patchwork, scales, tidyr |
+| Database | PostgreSQL 17, holding the MIMIC-III and MIMIC-IV schemas |
 
 ## Run order
 
@@ -95,7 +97,7 @@ be executed on its own.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.0.3.
+version 1.2.1.
 
 ## License
 

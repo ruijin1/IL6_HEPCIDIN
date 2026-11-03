@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 r"""MIMIC-III NICU: is the within-subject bilirubin decline specific to invasive infection?
 
-Negative-control (falsification) analysis added for the BMC Pediatrics resubmission.
+Negative-control (falsification) analysis added during revision of the manuscript.
 
 Rationale
   Coagulase-negative staphylococci (CoNS) account for about half of all positive blood cultures in the NICU and

@@ -4,9 +4,9 @@ r"""Generic Markdown manuscript -> submission-ready docx (Times New Roman 12 pt,
 Usage: python 20261009_md2docx_generic.py <input.md> <output.docx> [--numbered]
 
 Optional switches:
-  --numbered  centre an Arabic page number in the footer and enable **continuous line numbering** (the
-              Scientific Reports guidelines recommend that submitted manuscripts carry page/line numbers
-              so that reviewers can comment by position).
+  --numbered  centre an Arabic page number in the footer and enable **continuous line numbering** (most
+              journals require submitted manuscripts to carry page/line numbers so that reviewers can
+              comment by position).
               Without this switch everything stays as is (no page number, no line numbers).
 
 Generalised from 20261007_md2docx_manuscript.py, with additions:
