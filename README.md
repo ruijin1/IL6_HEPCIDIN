@@ -12,10 +12,9 @@ for IL6R and the HAMP locus), and human hepatocyte transcriptomes from GEO.
 
 ## Start here
 
-The full script-by-script index - `00_Code_Index_and_Run_Order.md` in the repository, shipped as
-`README_Code_Inventory.md` inside the code archive `Code_IL6-hepcidin-bilirubin-MR.zip` - contains
-the recommended run order, the software versions, the two runtime pitfalls described below, and a
-table that maps each number in the manuscript to the script and result file that produces it.
+The script-by-script index, `00_Code_Index_and_Run_Order.md`, contains the recommended run order,
+the software versions, the two runtime pitfalls described below, and a table that maps each number
+in the manuscript to the script and result file that produces it.
 
 ## Repository layout
 
@@ -97,7 +96,7 @@ be executed on its own.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.2.1.
+version 1.3.0.
 
 ## License
 
