@@ -2,7 +2,7 @@
 
 **Project**: IL-6 / hepcidin / bilirubin triangulation (clinical database x transcriptome x Mendelian randomization)
 **Packaging date**: 2026-10-09
-**Script count**: 53 (Python **47** + R **6**), divided into 5 groups by analysis layer
+**Script count**: 59 (Python **52** + R **7**), divided into 5 groups by analysis layer
 
 > This is the English translation of `03_Code/00_代码清单与运行顺序.md` (original Chinese version preserved unchanged). Local working directories were renamed to ASCII equivalents for public release; no analysis logic or numeric value was altered.
 
@@ -70,6 +70,7 @@
 | `20261009_mr_il6r_IVW_correlated.py` | * **IVW with correlated instruments** (`β=(gᵀΣ⁻¹b)/(gᵀΣ⁻¹g)`, `Ψ_ij=ρ_ij·se_i·se_j`) + **Cochran Q** heterogeneity screen |
 | `20261009_finemap_credible_set_il6r.py` | FinnGen FINEMAP credible sets (IL6R region, multiple traits), regional fetching via tbi |
 | `20261009_summarize_iron_mr.py` | **Direction-consistency summary** for the iron/erythroid MR (cell-by-cell determination against the expected sign of the model) |
+| `20261112_mr_sensitivity_substitutes.py` | * **Substitute sensitivity analyses for a four-SNP correlated instrument set** (Table S7): single-instrument Wald ratios, leave-one-instrument-out, weighted median (Bowden 2016), MR-Egger intercept and I²_GX (Bowden 2015) on the same four variants, and the correlation-aware estimate swept over the one LD coefficient absent from the reference panel (r = −0.30 to +0.30) | Weighted median within 0.01 SD of the correlation-aware estimate (MCH +0.0211 vs +0.0209); Egger intercept p = 0.099-0.97, I²_GX ≥ 0.998; no single instrument carries any association (leave-one-out ranges given in `sensitivity_loo.csv`) |
 
 ### FinnGen Neonatal Side
 
@@ -234,6 +235,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
 | Table 1 transfusion rows: −0.89 (−1.45, −0.33) p=0.0018 adjusting for any transfusion; −0.93 adjusting within the window; −0.99 (−1.70, −0.29) p=0.0057 with no transfusion in the window (531 pairs, 32 positive); −1.23 (−2.18, −0.29) p=0.011 never transfused (389 pairs, 21 positive) | `E_bilirubin_transfusion_robust.csv` |
 | Genetics: MCH +0.0209, MCV +0.0183, RDW -0.0139, sTfR -0.0263, TSAT +0.0135, total bilirubin +0.0074; Cochran Q p 0.09-0.83; heterogeneity 0.013/0.036/0.0018/0.00097 | `fig4A_genetic_forest.csv` (contains Q and Q_p columns) |
 | HAMP locus MCH p=1.7e-17 | `fig4B_hamp_locus.csv` |
+| **Table S7** and Results §12: weighted median MCH +0.0211 (SE 0.0019) / MCV +0.0193 / RDW −0.0151 / sTfR −0.0246 / TSAT +0.0226 / total bilirubin +0.0106; Egger intercept −0.0019 to +0.0088 (p 0.099-0.97); I²_GX ≥ 0.998; 3/4 to 4/4 instruments concordant in sign; LD sweep moves total bilirubin by 51% and MCH, MCV, RDW, TSAT by <6% | `sensitivity_substitutes.csv`, `sensitivity_loo.csv`, `sensitivity_unmeasured_ld.csv` (all three from `20261112_mr_sensitivity_substitutes.py`) |
 | **Table 3** colocalisation, narrow-window PP.H4: MCH 0.989, RDW 0.990, MCV 0.934, MCHC 0.973, PLT 0.988; RBC/RETIC/MRV 0.013/0.009/0.015 | `02_Colocalization/coloc_abf_final_summary.csv` (whole-region values also given) |
 | Hepatocytes: UGT1A1 -1.30 / -1.54 / -1.23 / -0.74 / +0.06 | `05_Figure_Data/fig5_hepatocyte.csv` (the dHepaRG row is the 6 h/24 h mean -1.3873) |
 | Neonatal GWAS power 5.8-11.1% | `finngen_neonatal_power_all5.csv` |
@@ -267,6 +269,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
    When `20261009_mr_il6r_IVW_correlated.py` builds the correlation matrix Σ, it starts from the identity matrix and fills in only the pairs present in the table,
    **so missing pairs are treated as r = 0** -- this is essentially equivalent to the measured r² < 0.01 (r < 0.1) and does not affect β or p.
    If a reproducer recomputes using only the files in this package, they will obtain a lower bound of 0.083-0.437, so this is stated explicitly here.
+   `20261112_mr_sensitivity_substitutes.py` therefore recomputes the correlation-aware estimate with this one coefficient set to **−0.30, −0.15, 0, +0.15 and +0.30 in turn** (`sensitivity_unmeasured_ld.csv`, Table S7): every interpreted trait remains significant across the whole range, and the estimate of total bilirubin, the most sensitive trait, moves by 51%.
 5. **Rows (5)/(6) of Table 1 have been recomputed at the pair level (4th verification round, 2026-10-10)**:
    `20261009_mimic_nicu_bilirubin_phototherapy_robust.py` originally used an **admission-level** exposure
    (`P2.hadm_id.isin(cc.hadm_id)`, "whether a definite pathogen occurred during that admission"), which is a different level from the **pair-level** definition of rows (1)-(4) in the same table,

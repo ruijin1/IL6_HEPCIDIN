@@ -5,7 +5,7 @@ Code accompanying the manuscript:
 > **Culture-proven infection is associated with lower total serum bilirubin in neonates: a retrospective cohort study with genetic and transcriptomic triangulation**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
-This repository holds 58 scripts (51 Python, 7 R) that reproduce every number, table and figure
+This repository holds 59 scripts (52 Python, 7 R) that reproduce every number, table and figure
 reported in the manuscript, across three evidence layers: two neonatal clinical cohorts
 (MIMIC-IV v1.0 and MIMIC-III v1.4), genetic analyses (Mendelian randomisation and colocalisation
 for IL6R and the HAMP locus), and human hepatocyte transcriptomes from GEO.
@@ -20,7 +20,7 @@ in the manuscript to the script and result file that produces it.
 
 | Folder | Scripts | Scope |
 |---|---|---|
-| `01_MR_Genetics` | 16 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
+| `01_MR_Genetics` | 17 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; substitute sensitivity analyses for the correlated four-SNP instrument set (single-instrument Wald ratios, leave-one-instrument-out, weighted median, MR-Egger, LD sensitivity; Table S7); IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
 | `02_Colocalization` | 5 Python, 5 R | Regional data and LD matrices; `coloc.abf` with allele harmonisation and dual windows; SuSiE-based colocalisation |
 | `03_Mechanism_GEO` | 14 Python | Search, download, verification and analysis of the human hepatocyte transcriptomic series, including circadian and replication analyses |
 | `04_Clinical_MIMIC` | 14 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
@@ -96,7 +96,7 @@ be executed on its own.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.3.1.
+version 1.4.0.
 
 ## License
 
