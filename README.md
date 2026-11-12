@@ -82,6 +82,20 @@ before running. No credential in this repository grants access to any MIMIC data
 `01_MR_Genetics/finngen_tabix.py` is a shared helper imported by other scripts; it is not meant to
 be executed on its own.
 
+## Where the scripts expect their input
+
+No primary data are redistributed in this repository. Every Python script declares its input
+directory as `DIR` (usually in the first 40 lines) and, where relevant, an output directory
+as `OUT`. These hold the author's local working paths, renamed to pure ASCII for portability
+- for example `D:\workbuddy_workspace\03-data\MR_finngen` - and are not required to exist on
+another machine. Point `DIR`/`OUT` at your own copy of the harmonised tables (or place the
+tables at those paths) before running. The input tables of the MR layer are themselves
+produced by the earlier scripts in `01_MR_Genetics` from public sources (FinnGen R12,
+OpenGWAS), so the run order above is not optional.
+`01_MR_Genetics/20261112_mr_sensitivity_substitutes.py` additionally honours the `MR_DIR`
+and `MR_OUT` environment variables, so the sensitivity analyses behind Table S7 can be
+regenerated without editing the source.
+
 ## Two runtime pitfalls
 
 1. **R cannot handle non-ASCII paths.** Argument strings passed to `Rscript` from a directory whose

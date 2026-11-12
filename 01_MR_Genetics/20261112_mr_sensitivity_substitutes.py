@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
+# NOTE: `DIR` below is the author's local working directory, renamed to pure ASCII; it does not
+#       exist outside that machine. No input table is redistributed with this repository: point
+#       `DIR` (or set MR_DIR / MR_OUT) at the directory holding the harmonised input tables.
 r"""* Substitute sensitivity analyses for a four-SNP correlated cis-pQTL instrument set
 
 Scientific question:
