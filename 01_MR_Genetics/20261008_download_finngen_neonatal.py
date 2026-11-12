@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Batch download of FinnGen R12 neonatal summary statistics
   - Resumable downloads (HTTP Range); can be re-run and skip completed files
   - Each file is checked for integrity against the official Content-Length

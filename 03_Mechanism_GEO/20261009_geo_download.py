@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Mechanism pillar step 3: download GEO processed files and check sample naming (to determine grouping)"""
 import os, gzip, sys, io, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Supplementary analysis: cross-dataset pairing of IL6R / SAA instruments + neonatal outcomes (with proxy SNV lookup)
 
 Motivation: in the main script each exposure uses only its own lead SNP, so some combinations are "missing in the outcome" (different datasets cover different variants).

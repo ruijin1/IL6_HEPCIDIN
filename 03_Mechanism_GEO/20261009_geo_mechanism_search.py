@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Mechanism pillar step 1: search GEO for usable datasets on "inflammation / IL-6 stimulation -> bilirubin metabolism pathway genes"
 
 Search strategy (multiple angles, to avoid relying on a single keyword):

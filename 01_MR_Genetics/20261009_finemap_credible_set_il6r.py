@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""(3) FinnGen FINEMAP credible set: does the MCH/MCV signal in the IL6R region **share a causal variant** with the 4 pQTL instrument loci?
 
 (token-free "colocalization-lite". True coloc needs region-level data on the pQTL side -> requires an OpenGWAS JWT.)

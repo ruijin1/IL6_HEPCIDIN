@@ -121,7 +121,7 @@ def fetch_region(data_url, tbi, chrom, start, end, cseq=None, cpos=None, cache_p
         FinnGen LD matrix                       : col_seq=1, col_beg=2  -> f[1]=pos (note f[2] is the string variant)
       Using the wrong columns makes the filter **silently drop every row** (hit this in the current round: finemap returned "no data in region" everywhere).
     """
-    # ** Column positions are always derived automatically from the tbi and **must not be hard-coded** (the biggest pitfall this round):
+    # ** Column positions are always derived automatically from the tbi and **must not be hard-coded** (the largest source of errors so far):
     #    the col_seq / col_beg that htslib writes into .tbi are **1-based**; subtract 1 when using them:
     #      summary_stats  col_seq=1, col_beg=2  -> cseq=0, cpos=1
     #      FINEMAP.snp    col_seq=6, col_beg=7  -> cseq=5(chromosome), cpos=6(position)

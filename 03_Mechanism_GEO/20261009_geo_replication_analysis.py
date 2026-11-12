@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Mechanism pillar · **independent replication**: inflammatory stimulation -> UGT1A1 / bilirubin-iron axis in human hepatocytes
 
 Aim: GSE202045 (human primary hepatocytes + IL-6) already gave UGT1A1 down (24h, 3/3 donors concordant).

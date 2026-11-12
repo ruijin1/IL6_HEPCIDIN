@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""(4) IVW meta-analysis of **correlated instruments** using the official FinnGen LD matrix (the two SNPs with r^2=0.44 cannot be treated as independent)
 
 Why this must be done: the main table of Section 15 uses the **per-SNP Wald ratio** of the 4 instruments;

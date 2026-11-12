@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""Mechanism pillar summary: merge the panel results from each dataset into a single "cross-dataset directional concordance" master table
 
 Input (same directory 03-data\MR_finngen\):

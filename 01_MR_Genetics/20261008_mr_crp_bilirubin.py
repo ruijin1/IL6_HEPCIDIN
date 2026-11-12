@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Main analysis of the new direction: bidirectional cis-MR between CRP (inflammation) <-> serum bilirubin
 
 WARNING: the token is read from the environment variable OGWAS_JWT and is not written to this file.
@@ -10,7 +8,7 @@ Method notes (all choices made under empirical constraints)
   - The instrument uses the **cis region** (gene +/-50kb), because SERVICES__PIPELINE=Error makes /api/tophits unavailable,
     so genome-wide clumping is not possible; cis-MR is itself the standard approach for pQTLs such as CRP/bilirubin
   - Distance pruning (500 kb) approximates LD clumping -- this approximation must be declared in the Methods
-  - Gene coordinates are **resolved dynamically** (MyGene) and never hard-coded: this project has already hit the "writing Ensembl IDs from memory" pitfall twice
+  - Gene coordinates are **resolved dynamically** (MyGene) and never hard-coded: two Ensembl IDs entered directly in this project turned out to be the wrong gene
   - Sample overlap: the two datasets in the main analysis may both derive from UKB; the **sensitivity analysis switches to Ligthart2018 (CRP) x BioBankJapan (bilirubin)**,
     different studies and different populations (East Asian), with no overlap
 """
@@ -140,7 +138,7 @@ def main():
     print("CRP <-> serum bilirubin  bidirectional cis-MR   %s" % time.strftime("%Y-%m-%d %H:%M"))
     print("=" * 96)
     print()
-    print("[0] Dynamically resolve gene coordinates (not from memory)")
+    print("[0] Dynamically resolve gene coordinates (not hard-coded)")
     crops = {}
     for sym in ("CRP", "UGT1A1"):
         ens, ch, s, e, nm = gene_coord(sym)

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""An LD-free colocalization criterion: **effect-ratio constancy**
 
 Why it is needed (the key to this round's conclusion):

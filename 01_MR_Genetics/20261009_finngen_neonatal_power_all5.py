@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""Power comparison across the 5 FinnGen R12 neonatal phenotypes + summary of the strongest regional signal
 
 Why this is done separately: the power section in `20261009_mr_il6r_finngen_full_neonatal.py` did not print because of an exposure key name mismatch

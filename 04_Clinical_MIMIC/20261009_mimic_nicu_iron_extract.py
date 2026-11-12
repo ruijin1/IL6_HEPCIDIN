@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""MIMIC-III NICU: extract the "infection x erythrocyte index/reticulocyte" observational data
 
 Why this step (the gap of the triangulation):

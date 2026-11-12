@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""(1) Power quantification for the FinnGen neonatal jaundice GWAS (to judge whether the negative IL6R result is "interpretable")
    (2) Cross-model re-aggregation of the HAMP (hepcidin) evidence -- the previous round may have over-discounted it
 

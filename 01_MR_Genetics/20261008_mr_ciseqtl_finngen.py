@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Design A, round 1: MR from four-gene cis-eQTL -> FinnGen R12 preterm birth/low birth weight
 
 WARNING: the token is read from the environment variable OGWAS_JWT, and is **never written to this file or any log**.
    Usage: export OGWAS_JWT='...'  then run this script.
 
 Design notes and empirical basis (2026-10-08):
-  - Ensembl IDs must be confirmed by reverse lookup from the gene symbol -- writing them from memory is error-prone (already hit in this project: 158321 is actually AUTS2, 110448 is actually CD5)
+  - Ensembl IDs are confirmed by reverse lookup from the gene symbol rather than entered directly; two IDs entered directly in this project turned out to be the wrong gene (158321 is AUTS2, 110448 is CD5)
   - OpenGWAS SERVICES__PIPELINE is in Error -> /api/tophits returns 502
     switched to the **interval form** of /api/associations ("11:118215059-118225876", hg19)
   - FinnGen summary statistics are hg38, but matching by **rsID** avoids the need for liftover

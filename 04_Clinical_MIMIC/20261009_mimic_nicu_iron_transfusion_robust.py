@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""MIMIC-III NICU: infection x erythrocyte indices -- robustness check **excluding transfusion confounding**
 
 Why this step is mandatory:

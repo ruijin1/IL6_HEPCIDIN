@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""MIMIC-III NICU: infection x iron-restricted erythropoiesis -- observational test (filling the clinical side of the argument)
 
 Hypothesis (derived from the genetic conclusion in section 15):

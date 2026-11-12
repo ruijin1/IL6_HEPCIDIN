@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""IL6R / UGT1A1 -> **neonatal jaundice** (FinnGen R12 P16_NEONTAL_JAUND_OTH_UNSP_CAUSES) cis-MR
 
 Why this step:

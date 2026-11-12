@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MIMIC_NICU_iron). Analysis logic is unchanged.
 r"""Culture -> erythrocyte-index measurement interval (MIMIC-III NICU, definite-pathogen group).
 
 Purpose

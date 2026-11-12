@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Download the remaining datasets needed for the mechanism pillar (URLs corrected per GEO directory rules: stem = GSE + first 2 digits + nnn)
 
 * Lesson: GEO FTP directory names are `GSE` + some leading digits of the number + `nnn` --

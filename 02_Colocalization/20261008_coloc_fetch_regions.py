@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Fetch regional summary statistics for the IL6R / SAA loci (for coloc)
 
 Regions: IL6R +/-150kb (hg19 chr1:154,227,669-154,591,926)

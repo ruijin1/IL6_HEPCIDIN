@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Mechanism pillar · circadian-rhythm dataset analysis (GSE218242 / GSE218243) -- honest positioning: orthogonal mechanism probing, not IL-6 replication
 
 * Prerequisite facts (verified, no hedging allowed):
@@ -14,7 +12,7 @@
     Q2 [GSE218242] Do the bilirubin pathway genes (UGT1A1/HMOX1/HAMP/LPIN1...) themselves show a 24h rhythm?
                    (cosinor fitting; the in-panel positive control = core clock genes must have a strong amplitude)
 
-* Gene IDs are always looked up and verified live at MyGene.info, never written from memory (once recorded CD3G as AUTS2)
+* Gene IDs are always looked up and verified live at MyGene.info; one ID entered directly in this project turned out to be AUTS2 rather than CD3G
 """
 import os, sys, gzip, json, re, urllib.request, time
 sys.stdout.reconfigure(encoding="utf-8")

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Verify GEO download integrity (compare Content-Length) and automatically re-download incomplete files.
 
 Why this is needed: a real trap hit on 2026-10-08 -- when a foreground command is killed by SIGTERM it leaves behind a file that **appears to exist but is truncated**,

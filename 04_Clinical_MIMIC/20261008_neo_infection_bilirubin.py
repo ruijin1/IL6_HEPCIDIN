@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """MIMIC-IV v1.0: observational association between neonatal infection and bilirubin trajectory (the step that decides the direction of the whole study)
 
 Design notes

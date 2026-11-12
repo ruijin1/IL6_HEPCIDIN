@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """IL-6 pathway (IL6R pQTL) and SAA (SAA1/SAA2 pQTL) -> serum bilirubin  bidirectional cis-MR
 
 Background (empirical constraints as of 2026-10-08, all reported in the Methods):
@@ -15,7 +13,7 @@ Background (empirical constraints as of 2026-10-08, all reported in the Methods)
 
 WARNING: the token is read from the environment variable OGWAS_JWT and is never written to this file.
 Method notes: cis region (gene +/-50kb) + distance pruning (500kb approximating LD clumping, to be declared in the Methods);
-all coordinates are resolved dynamically via MyGene (this project has already hit the "writing Ensembl IDs from memory" pitfall twice).
+all coordinates are resolved dynamically via MyGene; two Ensembl IDs entered directly in this project turned out to be the wrong gene.
 """
 import os, sys, json, math, time, csv, urllib.request, urllib.error, urllib.parse
 sys.stdout.reconfigure(encoding="utf-8")
@@ -165,7 +163,7 @@ def main():
     P("IL-6 pathway (IL6R) and SAA -> serum bilirubin  bidirectional cis-MR      %s" % time.strftime("%Y-%m-%d %H:%M"))
     P("=" * 100)
     P("")
-    P("[0] Dynamically resolve gene coordinates (not from memory)")
+    P("[0] Dynamically resolve gene coordinates (not hard-coded)")
     co = {}
     for sym in ("IL6", "IL6R", "SAA1", "SAA2", "UGT1A1", "CRP"):
         ens, ch, s, e, nm = gene_coord(sym)

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""Summarize the IL6R -> iron/erythroid/bilirubin MR and test "direction consistency" against the "hepcidin model" predictions
 
 Reads `MR_il6r_iron_erythroid_results.csv` and `finngen_lab_locus_scan.csv`.

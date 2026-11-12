@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""Build the LD correlation matrix for the IL6R region (FinnGen R12 official LD reference panel, 520,210 samples)
 
 Why this is needed:

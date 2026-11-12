@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Resumable downloader (GEO FTP silently hangs, so progress + chunked retry are mandatory)
 * Lesson: a single urllib connection reading a large GEO file stalls halfway without raising an error (this time GSE275342_RAW.tar stalled at 1.00 MB for over 10 minutes),
    so we switched to: range-chunked requests + per-chunk retry + real-time logging, and judge **progress per chunk** rather than as a whole.

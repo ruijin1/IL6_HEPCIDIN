@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Download the **independent replication** datasets for the mechanism pillar (not the two circadian ones)
 
 Background and findings (2026-10-09):

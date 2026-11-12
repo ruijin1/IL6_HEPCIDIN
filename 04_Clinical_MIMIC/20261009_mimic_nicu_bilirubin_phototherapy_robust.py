@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""MIMIC-III NICU: culture-positive -> bilirubin decline -- robustness check **controlling for phototherapy**
 
 Background: the project's **first observational finding came from MIMIC-IV** (culture-positive -> bilirubin -0.355, p=6x10^-59),

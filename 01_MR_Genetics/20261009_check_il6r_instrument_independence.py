@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""* Self-check: are the 4 IL6R instruments **independent**? Is the MCH/MCV signal in the IL6R region **the same causal variant as the instrument loci**?
 
 Two things (neither requires an OpenGWAS token):

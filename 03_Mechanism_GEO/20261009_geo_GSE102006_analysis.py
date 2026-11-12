@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""R3 · GSE102006 (HepG2 +/- cytokine mix, 6/12/24h, n=252, Agilent GPL6480)
 
 * Use only the **solvent control arm** (DMSO / TL_DMSO), avoiding the pharmacological effects of the 6 test compounds:

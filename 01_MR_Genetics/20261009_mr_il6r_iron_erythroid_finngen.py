@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""* The last piece of the mechanism layer: IL-6 pathway -> iron metabolism / erythroid indices (hepcidin axis)
 
 Scientific question:

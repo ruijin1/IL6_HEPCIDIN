@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 """Download the GPL6480 platform annotation (GSE102006 = HepG2 + cytokine mix, Agilent 4x44K)
 Take only the GENE_SYMBOL column for the probe -> symbol mapping.
 """

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MR_finngen). Analysis logic is unchanged.
 r"""**Panorama of reported associations** at the IL6R / HAMP loci (new GWAS Catalog API, no authentication required)
    -- Purpose: before using OpenGWAS for formal MR, do a free first pass to screen "whether there are any usable erythroid/iron-metabolism phenotypes"
 

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: Local working directories were renamed to ASCII equivalents for public release
-#       (e.g. D:\workbuddy_workspace\03-data\MIMIC_NICU_iron). Analysis logic is unchanged.
 r"""MIMIC-III NICU: within-subject bilirubin decline -- robustness check **controlling for red-cell transfusion**
 
 Why this step matters:
