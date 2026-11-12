@@ -21,10 +21,10 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, r"D:\workbuddy_workspace\02-scripts")
+sys.path.insert(0, r"D:\il6_hepcidin_work\02-scripts")
 import finngen_tabix as ft
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 COLOC = os.path.join(DIR, "coloc")
 CACHE = os.path.join(DIR, "tabix_cache")
 os.makedirs(COLOC, exist_ok=True)

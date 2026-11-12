@@ -10,7 +10,7 @@ import os, sys, csv, time, json, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
 JWT = os.environ.get("OGWAS_JWT", "")
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen\coloc"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen\coloc"
 LOG = os.path.join(OUT, "_fetch.log")
 _L = []
 

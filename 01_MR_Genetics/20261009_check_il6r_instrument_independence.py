@@ -15,12 +15,12 @@ Two things (neither requires an OpenGWAS token):
 """
 import os, sys, json
 sys.stdout.reconfigure(encoding="utf-8")
-sys.path.insert(0, r"D:\workbuddy_workspace\02-scripts")
+sys.path.insert(0, r"D:\il6_hepcidin_work\02-scripts")
 import numpy as np
 import pandas as pd
 import finngen_tabix as ft
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 CACHE = os.path.join(DIR, "tabix_cache")
 B = "https://storage.googleapis.com/finngen-public-data-r12/"
 os.makedirs(CACHE, exist_ok=True)
@@ -50,7 +50,7 @@ def ld_block():
         d[c] = pd.to_numeric(d[c], errors="coerce")
     # variant format looks like 1:154421941:T:C
     def key(v):
-        # * the format is `chr1_154420198_T_TA` (underscores), not `chr1:154420198:T:TA`
+        # the format is `chr1_154420198_T_TA` (underscores), not `chr1:154420198:T:TA`
         try:
             return int(str(v).split("_")[1])
         except Exception:
@@ -94,7 +94,7 @@ def finemap_block():
             tbi = ft.read_tbi(u + ".tbi", os.path.join(CACHE, "efm_%s.tbi" % omop))
         except Exception as e:
             print("\n  %-10s tbi failed %s" % (name, str(e)[:80])); continue
-        # * in finemap the chromosome is in column 7 (tbi col_seq=6, col_beg=7); the column positions must be passed explicitly
+        # in finemap the chromosome is in column 7 (tbi col_seq=6, col_beg=7); the column positions must be passed explicitly
         rows = ft.fetch_region(u, tbi, "chr1", IL6R_LO, IL6R_HI, cseq=6, cpos=7)
         if not rows:
             print("\n  %-10s no data in region" % name); continue

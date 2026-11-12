@@ -48,7 +48,7 @@ import pandas as pd
 from scipy import stats
 
 # Local working directory; no input table is distributed with this repository.
-DIR = os.environ.get("MR_DIR", r"D:\workbuddy_workspace\03-data\MR_finngen")
+DIR = os.environ.get("MR_DIR", r"D:\il6_hepcidin_work\03-data\MR_finngen")
 OUT = os.environ.get("MR_OUT", DIR)
 TOOLS = ["rs4601580", "rs7514452", "rs6690230", "rs4129267"]
 

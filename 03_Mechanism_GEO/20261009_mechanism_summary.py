@@ -17,7 +17,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 CORE = ["UGT1A1", "UGT1A6", "UGT1A9", "SLCO1B1", "ABCC2", "ABCG2", "HMOX1", "BLVRA",
         "NR0B2", "HNF4A", "HAMP", "SLC40A1", "SOD2", "CAT", "CRP", "SOCS3", "SAA1",
@@ -37,7 +37,7 @@ def main():
         if not os.path.exists(p):
             print("  (missing) %s" % fn); continue
         d = pd.read_csv(p, encoding="utf-8-sig")
-        # * src prefers the dataset column embedded in the file (one file may contain multiple datasets, e.g. replication contains GSE230325+GSE275342)
+        # src prefers the dataset column embedded in the file (one file may contain multiple datasets, e.g. replication contains GSE230325+GSE275342)
         if "dataset" in d.columns:
             d["src"] = d["dataset"].astype(str).str.replace(r"\s+.*$", "", regex=True).replace("", tag)
             d["src"] = d["src"].where(d["src"].astype(str).str.startswith("GSE"), tag)

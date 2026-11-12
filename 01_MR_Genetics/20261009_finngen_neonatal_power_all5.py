@@ -16,15 +16,14 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 B_SD = 0.0192          # adult IL6R -> bilirubin (SD/allele)
 PHENO = [("neonatal jaundice", 499, 499688, 0), ("neonatal bacterial sepsis", 203, 499933, 1),
          ("neonatal respiratory distress", 498, 499476, 0), ("chronic respiratory disease of perinatal origin (BPD)", 69, 499476, 0),
          ("preterm birth/low birth weight", 782, 499424, 3)]
 
-# The saved result files predate the English release and store the phenotype names in the
-# original form. Map them to the canonical English names so the comparisons above work
-# against either the old files or freshly regenerated ones.
+# The stored result files label the phenotypes in Chinese. Translate them here so the
+# lookups above work on both the archived files and anything regenerated later.
 PHENO_ALIAS = {
     "新生儿黄疸": "neonatal jaundice",
     "新生儿细菌性败血症": "neonatal bacterial sepsis",

@@ -26,7 +26,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 import pandas as pd
 import psycopg2
 
-OUT = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
+OUT = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 os.makedirs(OUT, exist_ok=True)
 CONN = dict(host="localhost", port=5432, user="postgres", password="1234", dbname="mimiciii")
 

@@ -20,13 +20,13 @@ Design:
 """
 import os, sys, time, json
 sys.stdout.reconfigure(encoding="utf-8")
-sys.path.insert(0, r"D:\workbuddy_workspace\02-scripts")
+sys.path.insert(0, r"D:\il6_hepcidin_work\02-scripts")
 import numpy as np
 import pandas as pd
 from scipy import stats
 import finngen_tabix as ft
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 CACHE = os.path.join(DIR, "tabix_cache")
 BASE = "https://storage.googleapis.com/finngen-public-data-r12/lab_values/summary_stats/"
 os.makedirs(CACHE, exist_ok=True)

@@ -8,7 +8,7 @@ Why this is needed: a real trap hit on 2026-10-08 -- when a foreground command i
 import os, json, sys, gzip, urllib.request, urllib.error
 sys.stdout.reconfigure(encoding="utf-8")
 
-DST = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
+DST = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
 URLS = {
     "GSE202045_humanPrimaryHep_mRNA_counts.csv.gz":
         "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE202nnn/GSE202045/suppl/GSE202045_Lukowski_2015_HumanPrimaryHep_IL6TC_mRNA_rawCounts.csv.gz",

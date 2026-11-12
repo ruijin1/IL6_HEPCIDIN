@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 FIN = os.path.join(DIR, "finngen_R12_P16_NEONTAL_JAUND_OTH_UNSP_CAUSES.gz")
 
 # FinnGen R12 metadata (ncase/ncontrol): start from the values known in the script, override if a manifest is obtained
@@ -95,7 +95,7 @@ def scan(fp, regions, want_rs, limit_chrom=None):
                     if rs in want_rs:
                         byrs.setdefault(rs, []).append(rec)
     except (EOFError, OSError, zlib.error) as e:
-        # * The file is still downloading -> stop at the truncation point; the region data already read remains usable
+        # The file is still downloading -> stop at the truncation point; the region data already read remains usable
         truncated = True
         print("  [note] reached end of file (may still be downloading): %s" % str(e)[:70])
     return cols, reg, byrs, last, truncated

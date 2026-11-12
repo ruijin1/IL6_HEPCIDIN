@@ -19,7 +19,7 @@ import pandas as pd
 import psycopg2
 import statsmodels.formula.api as smf
 
-DIR = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
+DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 CONN = dict(host="localhost", port=5432, user="postgres", password="1234", dbname="mimiciii")
 
 
@@ -67,7 +67,7 @@ def main():
                          gap_h=(post.charttime.iloc[0] - pre.charttime.iloc[-1]).total_seconds() / 3600,
                          ph_in_win=int(len(hp) > 0), ph_around=int(len(hp_pre) > 0),
                          any_ph_icd=int(cu.hadm_id in ph_icd),
-                         # * whether this pair's own culture is CoNS (for pair-level stratification, see (5)/(6))
+                         # whether this pair's own culture is CoNS (for pair-level stratification, see (5)/(6))
                          cu_is_cons=int(('staphylococcus' in str(cu.orgs).lower())
                                         or ('coagulase negative' in str(cu.orgs).lower()))
                          ))
@@ -88,7 +88,7 @@ def main():
     print("=" * 108)
     out = []
     def rep(tag, d, formula):
-        # * 2026-10-10: rows with too few samples must still be written to the results table, otherwise in the main-text Table 1
+        # 2026-10-10: rows with too few samples must still be written to the results table, otherwise in the main-text Table 1
         #   the row "(3) admission never receiving phototherapy (ICD) only, n=125 (positive 5), not estimable"
         #   would have no traceable record in the CSV for reviewers. Changed to record n / ncase + an empty estimate.
         if len(d) < 30 or d.positive.sum() < 8:
@@ -106,7 +106,7 @@ def main():
     rep("+ adjusted for interval and baseline value", P, "delta ~ positive + gap_h + pre")
     rep("(1) adjusted for phototherapy in window", P, "delta ~ positive + ph_in_win + gap_h + pre")
     rep("(2) no phototherapy in window only", P[P.ph_in_win == 0], "delta ~ positive + gap_h + pre")
-    # * 2026-10-10: the original "(4) non-CoNS positive vs negative" row was removed. That row `P.assign(positive=lambda d: d.positive)`
+    # 2026-10-10: the original "(4) non-CoNS positive vs negative" row was removed. That row `P.assign(positive=lambda d: d.positive)`
     #   was a no-op, making (4) numerically identical to "+ adjusted for interval and baseline value"; it was a deprecated duplicate
     #   superseded by (5)/(6), and was not referenced in the main-text Table 1. After removal the 7 CSV rows
     #   correspond one-to-one with the 7 rows in the main-text Table 1.

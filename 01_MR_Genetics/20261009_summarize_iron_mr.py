@@ -16,7 +16,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 # Model predictions: expected sign on the "each SD higher sIL6R" baseline
 EXPECT = {
@@ -31,9 +31,8 @@ ORDER = ["Serum iron", "Transferrin saturation TSAT", "Soluble transferrin recep
          "Red blood cell count", "RDW", "Reticulocyte %", "Reticulocyte count", "Erythropoietin EPO",
          "Total bilirubin (reference)"]
 
-# The saved result files predate the English release and store several trait names in the
-# original bilingual form. Map them to the canonical English names so the lookups above work
-# against either the old files or freshly regenerated ones.
+# Trait labels in the stored CSVs are mixed: some rows carry the Chinese name, some already
+# have the English one. The alias table below normalises both to a single label.
 TRAIT_ALIAS = {
     "血红蛋白 Hemoglobin": "Hemoglobin",
     "红细胞计数": "Red blood cell count",

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-r"""Cohort flow recomputation and audit trail  --  faithfully reproducing the definitions of 20261008_neo_infection_bilirubin*.py
+r"""Cohort flow recomputation, using the same definitions as 20261008_neo_infection_bilirubin*.py
 
 MIMIC-IV step by step:
   (1) NICU/SCN admissions

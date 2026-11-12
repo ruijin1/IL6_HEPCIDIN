@@ -3,7 +3,7 @@
 import os, gzip, sys, io, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
-DST = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
+DST = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
 os.makedirs(DST, exist_ok=True)
 
 FILES = [

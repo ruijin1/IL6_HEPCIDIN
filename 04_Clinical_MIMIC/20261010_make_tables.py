@@ -45,9 +45,8 @@ F5 = res_dir('05_', RES)
 DOCX = os.path.join(PKG, '01_Manuscript',
                     'Manuscript_IL6_hepcidin_bilirubin_triangulation_SR_v1.0_20261009.docx')
 
-# The saved result tables predate the English release and store the model labels in the
-# original form. Map them to the canonical English labels so the lookups below work against
-# either the old files or freshly regenerated ones.
+# Model labels in the earlier output tables are still the Chinese wording. The dictionaries
+# below map them to the labels used in the manuscript tables.
 MODEL_ALIAS_D = {
     '主模型（阳性 vs 阴性）': 'Main model (positive vs negative)',
     '+ 调整前后时间间隔与基线值': '+ adjusted for interval and baseline value',

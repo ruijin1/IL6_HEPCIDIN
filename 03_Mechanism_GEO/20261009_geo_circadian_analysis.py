@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Mechanism pillar · circadian-rhythm dataset analysis (GSE218242 / GSE218243) -- honest positioning: orthogonal mechanism probing, not IL-6 replication
+"""Mechanism pillar · circadian-rhythm dataset analysis (GSE218242 / GSE218243)
 
-* Prerequisite facts (verified, no hedging allowed):
+* Dataset structure (from the series metadata):
   The superseries GSE218244 (PMID 38657074, Sci Adv 2024) contains only 2 subseries, **neither with an IL-6/inflammation stimulation arm**:
     GSE218242  primary hepatocyte circadian time course (24-72h, every 3h, 2-3 replicates) -- single factor: time
     GSE218243  primary hepatocyte ARNTL(BMAL1) siRNA vs non-targeting control (36/42/48/54h, 2 replicates each)
-  -> Therefore this script answers **two answerable questions** and never masquerades as IL-6 replication:
+  -> With no IL-6 arm in either subseries, the two questions below are what these data can address:
     Q1 [GSE218243] Does knockdown of the core clock gene ARNTL in hepatocytes change bilirubin metabolism / heme / iron-hepcidin axis genes?
                    (rationale: inflammation and IL-6 are known to suppress hepatic clock genes; if ARNTL down also lowers UGT1A1,
                      then IL-6 -> UGT1A1 down has a candidate mediation chain "via clock genes")
@@ -20,8 +20,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 PANEL = [
     ("HMOX1", "heme oxygenase 1 (rate-limiting for bilirubin production)"), ("HMOX2", "heme oxygenase 2"),
@@ -57,7 +57,7 @@ CLOCKGENES = ["ARNTL", "CLOCK", "PER1", "PER2", "PER3", "CRY1", "CRY2", "NR1D1",
 
 
 # ---------------- live lookup and verification: symbol -> ENSG ----------------
-# * deprecated symbol mapping (HGNC renaming; MyGene's symbol: query can no longer resolve the old name, real tests return 0 hits)
+# deprecated symbol mapping (HGNC renaming; MyGene's symbol: query can no longer resolve the old name, real tests return 0 hits)
 #   ARNTL -> BMAL1 (tested 2026-10-09: `symbol:ARNTL` 0 hits, `symbol:BMAL1` -> ENSG00000133794)
 DEPRECATED = {"ARNTL": "BMAL1"}
 
@@ -77,7 +77,7 @@ def mygene_map(symbols, cache=os.path.join(OUT, "_mygene_symbol2ensg.json")):
                 d = json.load(f)
         except Exception:
             d = {}
-    # * the cache-hit test must use "value is non-empty", not `s in d` -- otherwise None is treated as resolved and the follow-up lookup is skipped (hit this before)
+    # the cache-hit test must use "value is non-empty", not `s in d` -- otherwise None is treated as resolved and the follow-up lookup is skipped (hit this before)
     todo = [s for s in symbols if not d.get(s)]
     if todo:
         print("  MyGene lookup for %d symbols..." % len(todo))
@@ -100,7 +100,7 @@ def mygene_map(symbols, cache=os.path.join(OUT, "_mygene_symbol2ensg.json")):
             except Exception as e:
                 print("    MyGene batch failed:", str(e)[:70])
             time.sleep(0.4)
-    # * fallback: batch OR queries miss entries (in real tests ARNTL=BMAL1 was missed -- missing the KD target ruins the analysis)
+    # fallback: batch OR queries miss entries (in real tests ARNTL=BMAL1 was missed -- missing the KD target ruins the analysis)
     miss = [s for s in symbols if not d.get(s)]
     if miss:
         print("  fallback single lookups for %d: %s" % (len(miss), miss))

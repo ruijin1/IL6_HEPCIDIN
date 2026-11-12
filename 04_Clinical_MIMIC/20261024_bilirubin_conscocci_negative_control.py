@@ -26,7 +26,7 @@ import pandas as pd
 import statsmodels.formula.api as smf
 
 DIR = (sys.argv[1] if len(sys.argv) > 1 else
-       os.environ.get("MIMIC_CSV_DIR", r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"))
+       os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 OUT = os.path.join(DIR, "F_bilirubin_conscocci_negative_control.csv")
 
 

@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import psycopg2
 
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 con = psycopg2.connect(host="localhost", port=5432, user="postgres",
                        password="1234", dbname="mimiciv10")
 con.autocommit = True

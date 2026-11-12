@@ -79,6 +79,6 @@ for tag, term in TERMS:
     except Exception as e:
         print("[%s] search failed %s\n" % (tag, str(e)[:120]))
 
-json.dump(seen, open(r"D:\workbuddy_workspace\03-data\MR_finngen\geo_candidates.json", "w",
+json.dump(seen, open(r"D:\il6_hepcidin_work\03-data\MR_finngen\geo_candidates.json", "w",
                      encoding="utf-8"), ensure_ascii=False, indent=1)
 print("collected %d candidate datasets -> geo_candidates.json" % len(seen))

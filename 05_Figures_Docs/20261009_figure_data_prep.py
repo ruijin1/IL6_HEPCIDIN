@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-r"""Prepare data for the manuscript figures (using only verified data sources, inventing no numbers)
+r"""Prepare the input tables for the manuscript figures
 
 Outputs under `03-data/Figures/figdata/`:
   fig2A_bilirubin_mimic3.csv    MIMIC-III pre/post paired delta bilirubin (7 models; from D_bilirubin_phototherapy_robust.csv)
@@ -21,9 +21,9 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-MR = r"D:\workbuddy_workspace\03-data\MR_finngen"
-IRON = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
-OUT = r"D:\workbuddy_workspace\03-data\Figures\figdata"
+MR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
+IRON = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
+OUT = r"D:\il6_hepcidin_work\03-data\Figures\figdata"
 os.makedirs(OUT, exist_ok=True)
 
 # The saved MIMIC-IV exposure table predates the English release and stores the group
@@ -100,7 +100,7 @@ def write_ascii(df, name, cols):
 def fig2A():
     d = pd.read_csv(os.path.join(MR, "coloc", "..", "..", "MIMIC_NICU_iron",
                                  "D_bilirubin_phototherapy_robust.csv"), encoding="utf-8-sig")
-    # * 2026-10-10: the source table now also records models that were "insufficient sample, not estimable" (estimable=0, e.g. (3) n=125 positive 5),
+    # 2026-10-10: the source table now also records models that were "insufficient sample, not estimable" (estimable=0, e.g. (3) n=125 positive 5),
     #   whose b/lo/hi/p are NaN. They must be removed before plotting, otherwise fig 2a would gain an empty row that cannot be drawn.
     if "estimable" in d.columns:
         d = d[d["estimable"] == 1]
@@ -121,7 +121,7 @@ def fig2B():
     d = d[(d.bili_first_age_h >= 0) & (d.bili_first_age_h <= 168)]
     d["win"] = pd.cut(d.bili_first_age_h, bins, right=False)
     rows = []
-    # * Plot only the overlapping window where both groups have data (<=48h): first bilirubin in culture-positive infants is almost always
+    # Plot only the overlapping window where both groups have data (<=48h): first bilirubin in culture-positive infants is almost always
     #   sampled within 48h, whereas the "no infection" group only has abundant data after 72h (screening at postnatal days 3-5) -- comparing across windows confounds the testing indication.
     for (w, g), sub in d.groupby(["win", "grp"], observed=True):
         if w.left >= 48:
@@ -169,7 +169,7 @@ def fig3B():
     npos_s = pd.Series(wide.index.map(npos), index=wide.index).fillna(0).astype(int)
     wide["n_pos"] = npos_s.clip(upper=2)
     wide = wide.dropna(subset=["bw_kg"])
-    # * The dose-response must use the same sample as the main cross-sectional analysis (A_crosssection_results.csv, n = 710),
+    # The dose-response must use the same sample as the main cross-sectional analysis (A_crosssection_results.csv, n = 710),
     #   otherwise the denominator differs between indices (under the old definition hct reached 957 and the positive count was 120 != 107 in the main analysis).
     core = wide.dropna(subset=["mcv", "mch", "rdw"])
     print("\n[fig3B] unified to the main-analysis sample: n = %d (any positive = %d)"

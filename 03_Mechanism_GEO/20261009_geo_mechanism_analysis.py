@@ -19,8 +19,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 PANEL = [
     ("HMOX1", "heme oxygenase 1 (produces bilirubin)"), ("HMOX2", "heme oxygenase 2"),

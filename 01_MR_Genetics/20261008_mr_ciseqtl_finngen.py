@@ -26,7 +26,7 @@ GENES = {
     "THBS1": dict(ens="ENSG00000137801", hg19=("15", 39873280, 39891667)),
 }
 
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 FINNGEN = os.path.join(OUT, "finngen_R12_preterm_lowbw.gz")
 FINNGEN_EXPECT = 792_903_109   # official Content-Length; gzip raises EOFError when the download is incomplete
 P_THRESH = 5e-8          # genome-wide significant

@@ -19,7 +19,7 @@ import os, sys, json, math, time, csv, urllib.request, urllib.error, urllib.pars
 sys.stdout.reconfigure(encoding="utf-8")
 
 JWT = os.environ.get("OGWAS_JWT", "")
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 LOG = os.path.join(OUT, "_mr_il6_saa.log")
 P_CIS, PAD, PRUNE = 5e-8, 50_000, 500_000
 _L = []
@@ -63,7 +63,7 @@ def gene_coord(symbol):
     for h in d.get("hits", []):
         if h.get("symbol") != symbol:
             continue
-        # * MyGene's ensembl may be a dict ({"gene": "ENSG..."}) or a list (multiple transcripts/multiple entries)
+        # MyGene's ensembl may be a dict ({"gene": "ENSG..."}) or a list (multiple transcripts/multiple entries)
         eg = h.get("ensembl")
         if isinstance(eg, list):
             eg = eg[0] if eg else None

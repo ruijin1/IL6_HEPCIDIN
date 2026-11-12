@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 PHENO = [
     ("P16_NEONTAL_JAUND_OTH_UNSP_CAUSES", "neonatal jaundice", 499, 499688),

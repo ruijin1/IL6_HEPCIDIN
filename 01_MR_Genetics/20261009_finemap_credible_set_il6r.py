@@ -11,12 +11,12 @@ r"""(3) FinnGen FINEMAP credible set: does the MCH/MCV signal in the IL6R region
 """
 import os, sys, time, json
 sys.stdout.reconfigure(encoding="utf-8")
-sys.path.insert(0, r"D:\workbuddy_workspace\02-scripts")
+sys.path.insert(0, r"D:\il6_hepcidin_work\02-scripts")
 import numpy as np
 import pandas as pd
 import finngen_tabix as ft
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 B = "https://storage.googleapis.com/finngen-public-data-r12/lab_values/finemap/full/finemap/"
 LO, HI = 154_300_000, 154_800_000
 POS = json.load(open(os.path.join(DIR, "_il6r_snp_coords.json"), encoding="utf-8"))

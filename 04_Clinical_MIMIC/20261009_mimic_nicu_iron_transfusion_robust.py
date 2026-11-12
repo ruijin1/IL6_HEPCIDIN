@@ -21,7 +21,7 @@ import pandas as pd
 import psycopg2
 import statsmodels.formula.api as smf
 
-DIR = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
+DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 CONN = dict(host="localhost", port=5432, user="postgres", password="1234", dbname="mimiciii")
 
 

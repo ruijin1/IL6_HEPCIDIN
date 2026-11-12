@@ -26,7 +26,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 TOK = os.environ.get("OGWAS_JWT", "").strip()
 if not TOK:
     raise SystemExit("!! OGWAS_JWT environment variable not set")
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\coloc_ogwasld"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen\coloc_ogwasld"
 os.makedirs(DIR, exist_ok=True)
 LOG = os.path.join(DIR, "_fetch.log")
 _L = []

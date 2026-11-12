@@ -16,8 +16,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 PANEL = [
     ("UGT1A1", "*bilirubin conjugation"), ("UGT1A6", "UGT1A6"), ("UGT1A9", "UGT1A9"), ("UGT2B7", "UGT2B7"),
@@ -97,7 +97,7 @@ def main():
     print("samples %d; probes %d" % (len(accs), len(rows)))
     if not accs or not rows:
         print("!! parsing failed"); return
-    # * must use orient="index": otherwise pandas treats the dict keys as **column names**, producing a transposed 252x28796 matrix
+    # must use orient="index": otherwise pandas treats the dict keys as **column names**, producing a transposed 252x28796 matrix
     if len(accs) != len(next(iter(rows.values()))):
         print("!! sample count (%d) and data column count (%d) differ, aborting" % (len(accs), len(next(iter(rows.values()))))); return
     X = pd.DataFrame.from_dict(rows, orient="index")

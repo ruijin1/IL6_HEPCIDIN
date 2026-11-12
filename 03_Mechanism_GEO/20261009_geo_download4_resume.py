@@ -6,7 +6,7 @@
 import os, sys, time, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
-DST = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
+DST = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
 B = "https://ftp.ncbi.nlm.nih.gov/geo/series/"
 JOBS = [
     (B + "GSE275nnn/GSE275342/suppl/GSE275342_RAW.tar", "GSE275342_RAW.tar"),
@@ -40,7 +40,7 @@ def fetch(url, dst):
     fails = 0
     with open(dst, mode) as f:
         while have < total:
-            # * per-chunk timeout guard: GEO hangs silently, so reconnect if nothing is read
+            # per-chunk timeout guard: GEO hangs silently, so reconnect if nothing is read
             end = min(have + CHUNK, total) - 1
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0",

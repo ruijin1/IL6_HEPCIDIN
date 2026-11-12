@@ -16,7 +16,7 @@ import os, sys, json, math, time, urllib.request, urllib.error, urllib.parse
 sys.stdout.reconfigure(encoding="utf-8")
 
 JWT = os.environ.get("OGWAS_JWT", "")
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 P_CIS = 5e-8
 PAD = 50_000          # cis window extension
 PRUNE = 500_000       # distance-pruning window
@@ -105,7 +105,7 @@ def run_mr(expo, outmap, label):
         if not o:
             miss.append(rs)
             continue
-        # * FIX: the beta/se passed in must be the **exposure's** (previously the outcome's were passed by mistake, making b constantly equal to 1.0000)
+        # FIX: the beta/se passed in must be the **exposure's** (previously the outcome's were passed by mistake, making b constantly equal to 1.0000)
         nx, nsx, st = align(e["ea"], e["nea"], o.get("ea"), o.get("nea"), e["beta"], e["se"])
         if st == "mismatch" or nx is None:
             miss.append(rs + "(allele mismatch)")

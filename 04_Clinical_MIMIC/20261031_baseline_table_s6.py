@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 DIR = (sys.argv[1] if len(sys.argv) > 1
-       else os.environ.get("MIMIC_CSV_DIR", r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"))
+       else os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 
 # Classification identical to the published analyses: a positive culture row is CoNS when the
 # organism string contains "staphylococcus" (MIMIC-III reports "STAPHYLOCOCCUS, COAGULASE NEGATIVE");

@@ -17,7 +17,7 @@ Background and findings (2026-10-09):
 import os, sys, gzip, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
-DST = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
+DST = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
 os.makedirs(DST, exist_ok=True)
 B = "https://ftp.ncbi.nlm.nih.gov/geo/series/"
 

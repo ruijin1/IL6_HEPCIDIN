@@ -143,7 +143,7 @@ def fetch_region(data_url, tbi, chrom, start, end, cseq=None, cpos=None, cache_p
     lo = min(c[0] for c in chunks)
     hi = max(c[1] for c in chunks)
     fs = (lo >> 16)
-    # * End padding: the default +64 KB suffices for FinnGen summary_stats;
+    # End padding: the default +64 KB suffices for FinnGen summary_stats;
     #   but `*.FINEMAP.snp.bgz` in practice **under-covers** (the content fetched per tbi chunk stops before the target region,
     #   causing the false negative "0 rows in region") -> such files need a larger padding (use the tail_pad argument).
     fe = (hi >> 16) + tail_pad

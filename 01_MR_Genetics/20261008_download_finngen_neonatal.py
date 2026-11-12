@@ -8,7 +8,7 @@ import os, sys, time, json, urllib.request, urllib.error
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 BASE = "https://storage.googleapis.com/finngen-public-data-r12/summary_stats/release/"
 LOG = os.path.join(OUT, "_download_progress.log")
 os.makedirs(OUT, exist_ok=True)

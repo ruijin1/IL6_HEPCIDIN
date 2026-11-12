@@ -87,7 +87,7 @@ be executed on its own.
 No primary data are redistributed in this repository. Every Python script declares its input
 directory as `DIR` (usually in the first 40 lines) and, where relevant, an output directory
 as `OUT`. These hold the author's local working paths, renamed to pure ASCII for portability
-- for example `D:\workbuddy_workspace\03-data\MR_finngen` - and are not required to exist on
+- for example `D:\il6_hepcidin_work\03-data\MR_finngen` - and are not required to exist on
 another machine. Point `DIR`/`OUT` at your own copy of the harmonised tables (or place the
 tables at those paths) before running. The input tables of the MR layer are themselves
 produced by the earlier scripts in `01_MR_Genetics` from public sources (FinnGen R12,

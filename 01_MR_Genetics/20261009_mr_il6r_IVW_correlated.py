@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 
 def main():
@@ -44,7 +44,7 @@ def main():
     n = len(P)
     S = np.eye(n)
     print("\nLD correlation matrix among instruments (using the official FinnGen R12 r, 520,210 samples)")
-    # * Build the signed correlation matrix from ld_il6r_tools.csv (long table pos1/pos2/r/r2)
+    # Build the signed correlation matrix from ld_il6r_tools.csv (long table pos1/pos2/r/r2)
     ldf = pd.read_csv(os.path.join(DIR, "ld_il6r_tools.csv"), encoding="utf-8-sig")
     for i, pi in enumerate(P):
         for j, pj in enumerate(P):
@@ -86,13 +86,13 @@ def main():
         num = float(gg @ Ssi @ bs)
         dn = float(gg @ Ssi @ gg)
         beta = num / dn
-        # * Standard error of the correlated-instrument IVW: Var(β) = (g^T Σ^-1 Ψ Σ^-1 g) / (g^T Σ^-1 g)^2,
+        # Standard error of the correlated-instrument IVW: Var(β) = (g^T Σ^-1 Ψ Σ^-1 g) / (g^T Σ^-1 g)^2,
         #   where Ψ_ij = ρ_ij * se_i * se_j is the covariance matrix of the outcome effect estimates
         Psi = Ss * np.outer(se_o, se_o)
         var = float(gg @ Ssi @ Psi @ Ssi @ gg) / (dn ** 2)
         se = np.sqrt(var) if var > 0 else np.nan
         p = 2 * stats.norm.sf(abs(beta / se)) if se and se > 0 else np.nan
-        # * Cochran's Q for correlated instruments (multivariate form): Q = (b-βg)^T Ψ^-1 (b-βg), df = n-1
+        # Cochran's Q for correlated instruments (multivariate form): Q = (b-βg)^T Ψ^-1 (b-βg), df = n-1
         try:
             resid = bs - beta * gg
             Q = float(resid @ np.linalg.inv(Psi) @ resid)

@@ -26,7 +26,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-DIR = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
+DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 OUTDIR = DIR
 
 # The variable list used verbatim by 20261009_mimic_nicu_iron_analysis.py. Note that "hb"

@@ -25,10 +25,10 @@ sys.stdout.reconfigure(encoding="utf-8")
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, r"D:\workbuddy_workspace\02-scripts")
+sys.path.insert(0, r"D:\il6_hepcidin_work\02-scripts")
 import finngen_tabix as ft
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 COLOC = os.path.join(DIR, "coloc")
 CACHE = os.path.join(DIR, "tabix_cache")
 LDURL = "https://storage.googleapis.com/finngen-public-data-r12/ld_matrix/finngen_r12_chr1_ld.tsv.gz"
@@ -41,7 +41,7 @@ FILES = ["exp_IL6R_folkersen2018", "exp_IL6R_folkersen2020", "exp_IL6R_pietzner2
          "out_mch_finngen", "out_mcv_finngen", "out_bil_finngen_lab",
          "out_jaund_finngen", "out_crp_said2022"]
 
-# * Which files have GRCh37 positions: everything from OpenGWAS is 37;
+# Which files have GRCh37 positions: everything from OpenGWAS is 37;
 #   FinnGen sources (out_*_finngen) are already 38. Mixing them **silently fails all matching**
 #   (hit this again this round).
 GRCH37_FILES = {"exp_IL6R_folkersen2018", "exp_IL6R_folkersen2020", "exp_IL6R_pietzner2020",
@@ -110,7 +110,7 @@ def main():
     print("=" * 108)
     map_rows, miss = [], {}
     for (f, vid), (pos, ea, nea) in recs.items():
-        # * convert uniformly to GRCh38 to query the LD panel
+        # convert uniformly to GRCh38 to query the LD panel
         p38 = pos + OFF37TO38 if f in GRCH37_FILES else pos
         if not (WIN[0] + OFF37TO38 <= p38 <= WIN[1] + OFF37TO38):
             continue
@@ -149,7 +149,7 @@ def main():
     print("   matrix %d x %d; filled %d off-diagonal elements" % (n, n, got))
     S = (S + S.T) / 2
     np.fill_diagonal(S, 1.0)
-    # * FinnGen's LD long table **lists only part of the pairs** (measured 849,059 pairs within this window
+    # FinnGen's LD long table **lists only part of the pairs** (measured 849,059 pairs within this window
     #   << all pairs), so the unlisted pairs are set to 0 -> the matrix is not positive definite and
     #   `susie_rss` will reject it.
     #   Handling: apply the **nearest positive-definite projection** (eigenvalue truncation at eps, then

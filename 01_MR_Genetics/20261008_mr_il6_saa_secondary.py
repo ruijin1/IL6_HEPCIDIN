@@ -8,7 +8,7 @@ import os, sys, json, math, time, csv, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
 JWT = os.environ.get("OGWAS_JWT", "")
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 LOG = os.path.join(OUT, "_mr_secondary.log")
 _L = []
 

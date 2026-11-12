@@ -64,6 +64,6 @@ for acc, note in CAND.items():
     out[acc] = rec
     print()
 
-json.dump(out, open(r"D:\workbuddy_workspace\03-data\MR_finngen\geo_files.json", "w", encoding="utf-8"),
+json.dump(out, open(r"D:\il6_hepcidin_work\03-data\MR_finngen\geo_files.json", "w", encoding="utf-8"),
           ensure_ascii=False, indent=1)
 print("saved geo_files.json")

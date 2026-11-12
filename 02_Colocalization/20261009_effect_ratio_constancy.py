@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 COLOC = os.path.join(DIR, "coloc")
 
 PAIRS = [
@@ -65,7 +65,7 @@ def main():
         mo = MAP[MAP.file == outf][["id", "ld_id"]]
         e = e.merge(me, left_on="rsid", right_on="id", how="inner").drop_duplicates("ld_id")
         o = o.merge(mo, left_on="rsid", right_on="id", how="inner").drop_duplicates("ld_id")
-        # * pandas suffixes produce "beta.e"/"beta.o" (with a dot), not "beta_e";
+        # pandas suffixes produce "beta.e"/"beta.o" (with a dot), not "beta_e";
         #   rename them uniformly to _e / _o for dotted access.
         e = e.rename(columns={c: c + "_e" for c in ("rsid", "beta", "se", "eaf", "p", "position")})
         o = o.rename(columns={c: c + "_o" for c in ("rsid", "beta", "se", "eaf", "p", "position")})

@@ -23,7 +23,7 @@
 
 **Two runtime constraints that must be noted** (pitfalls encountered in this project; see SKILL):
 
-1. **R cannot handle Chinese (non-ASCII) paths**: `Rscript script.R "D:/workbuddy_workspace/..."` decodes the argument into garbled characters.
+1. **R cannot handle Chinese (non-ASCII) paths**: `Rscript script.R "D:/il6_hepcidin_work/..."` decodes the argument into garbled characters.
    -> Workaround: first copy the data to a pure-ASCII directory (e.g. `%TEMP%\coloc4`), call R with the ASCII path, then copy back after it finishes.
 2. **R cannot directly read CSVs containing Chinese characters** (`invalid input found on input connection`, returns 0 rows).
    -> Workaround: perform all label mapping on the Python side, and export a **pure-ASCII, BOM-free** copy (named `*_ascii.csv` in this project) for R.
@@ -88,7 +88,7 @@
 
 | Script | Description |
 |---|---|
-| `20261008_mr_ciseqtl_finngen.py` | An attempt at **two-sample cis-eQTL MR** on the preterm/low-birth-weight FinnGen data. **The manuscript does not cite this branch** ("eQTL" appears 0 times in the whole manuscript); its outputs `MR_ciseqtl_preterm_result.csv` and `MR_instruments.json` are written to the external data directory `D:\workbuddy_workspace\03-data\MR_finngen`, **not included in the package**. The script is kept only to document this abandoned path. |
+| `20261008_mr_ciseqtl_finngen.py` | An attempt at **two-sample cis-eQTL MR** on the preterm/low-birth-weight FinnGen data. **The manuscript does not cite this branch** ("eQTL" appears 0 times in the whole manuscript); its outputs `MR_ciseqtl_preterm_result.csv` and `MR_instruments.json` are written to the external data directory `D:\il6_hepcidin_work\03-data\MR_finngen`, **not included in the package**. The script is kept only to document this abandoned path. |
 
 ---
 

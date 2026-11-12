@@ -19,8 +19,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-DIR = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+DIR = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 PANEL = [
     ("UGT1A1", "*bilirubin conjugation (determines serum bilirubin)"), ("UGT1A6", "UGT1A6"), ("UGT1A9", "UGT1A9"),
@@ -214,11 +214,11 @@ def r2():
     print("  %d files inside RAW" % len(files))
     if not files:
         print("  !! no files inside tar"); return []
-    # * the filename carries the grouping: GSM..._Hep3BnIL6_rep1.txt.gz -- no guessing, parse the filename directly
+    # the filename carries the grouping: GSM..._Hep3BnIL6_rep1.txt.gz -- no guessing, parse the filename directly
     mat = {}
     for fp in files:
         base = os.path.basename(fp)
-        # * GSE275342's suppl is StringTie/RSEM style:
+        # GSE275342's suppl is StringTie/RSEM style:
         #     index = `SYMBOL_SYMBOL` (e.g. A1BG_A1BG), columns = gene_id, transcript_id(s), length,
         #     effective_length, expected_count, TPM, FPKM
         #   -> do not take the "last numeric column" (that is FPKM); **prefer TPM**; the index must drop the duplicated `_SYMBOL` suffix
@@ -254,7 +254,7 @@ def r2():
         if len(case) >= 2 and len(ctrl) >= 2:
             rows += analyze(lg, [("IL-6 vs vehicle (%s)" % cl, case)], ctrl,
                             "GSE275342 %s human liver cancer cell line IL-6 24h" % cl, mapd=mp)
-    # * no "two-line merge": the expression baselines of Hep3B and Huh7 differ greatly (UGT1A1 baseline differs by ~0.6 log2,
+    # no "two-line merge": the expression baselines of Hep3B and Huh7 differ greatly (UGT1A1 baseline differs by ~0.6 log2,
     #   CYP3A4 by ~4 orders of magnitude), and merging would only introduce between-line variance without adding power (removed in the previous version).
     print("\n  WARNING: no Hep3B+Huh7 merged analysis: the two lines differ too much in metabolic phenotype baseline, so merging has no statistical meaning")
     return rows

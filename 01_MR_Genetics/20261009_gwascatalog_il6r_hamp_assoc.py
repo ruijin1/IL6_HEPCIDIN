@@ -12,7 +12,7 @@ r"""**Panorama of reported associations** at the IL6R / HAMP loci (new GWAS Cata
 import urllib.request, urllib.parse, json, re, time, sys, os
 sys.stdout.reconfigure(encoding="utf-8")
 
-OUT = r"D:\workbuddy_workspace\03-data\MR_finngen"
+OUT = r"D:\il6_hepcidin_work\03-data\MR_finngen"
 
 VARIANTS = ["rs4129267", "rs4601580", "rs7514452", "rs6690230",   # IL6R cis-pQTL
             "rs10421768", "rs855791", "rs1799945", "rs1800562",   # HAMP promoter, TMPRSS6, HFE C282Y/H63D

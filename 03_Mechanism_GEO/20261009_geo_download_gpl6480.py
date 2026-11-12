@@ -5,7 +5,7 @@ Take only the GENE_SYMBOL column for the probe -> symbol mapping.
 import os, sys, time, urllib.request
 sys.stdout.reconfigure(encoding="utf-8")
 
-DST = r"D:\workbuddy_workspace\03-data\MR_finngen\geo"
+DST = r"D:\il6_hepcidin_work\03-data\MR_finngen\geo"
 URL = "https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL6nnn/GPL6480/annot/GPL6480.annot.gz"
 DSTF = os.path.join(DST, "GPL6480.annot.gz")
 CHUNK = 1 << 20

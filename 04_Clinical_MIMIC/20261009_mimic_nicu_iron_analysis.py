@@ -24,7 +24,7 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-DIR = r"D:\workbuddy_workspace\03-data\MIMIC_NICU_iron"
+DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 OUT = DIR
 
 CONT = ["mcv", "mch", "mchc", "rdw", "hb", "hct", "retic", "bili_total"]
