@@ -42,6 +42,7 @@ Interpretation limit, stated here because it is easy to lose in a table of numbe
 """
 import os
 import json
+import unicodedata
 
 import numpy as np
 import pandas as pd
@@ -51,6 +52,17 @@ from scipy import stats
 DIR = os.environ.get("MR_DIR", r"D:\il6_hepcidin_work\03-data\MR_finngen")
 OUT = os.environ.get("MR_OUT", DIR)
 TOOLS = ["rs4601580", "rs7514452", "rs6690230", "rs4129267"]
+
+# The six traits the manuscript interprets. The LD sweep is summarised over these and not over
+# all fifteen traits in the results table: several of the others sit on coefficients close to
+# zero, so their relative swing is large without saying anything about the estimates that are
+# actually reported. Labels are the ones stored in the result table.
+INTERPRETED = [
+    "MCH", "MCV", "RDW",
+    "可溶性转铁蛋白受体 sTfR",
+    "转铁蛋白饱和度 TSAT",
+    "总胆红素（参照）",
+]
 
 
 def ld_matrix(names):
@@ -190,8 +202,17 @@ def main():
     piv = d.pivot(index="trait", columns="r_unmeasured", values="beta")
     print("\nsensitivity to the unmeasured LD pair (rs4601580-rs6690230), beta_IVW:")
     print(piv.to_string(float_format=lambda x: f"{x:+.4f}"))
-    print("\nmax |change| across r = -0.30..+0.30, relative to r = 0: %.1f%%"
-          % (100 * float((piv.max(axis=1) - piv.min(axis=1)).abs().max() / piv[0.0].abs().max())))
+    # Swing expressed against each trait's own r = 0 estimate, so the numbers below correspond
+    # one to one with the percentages quoted in the manuscript.
+    rel = (piv.max(axis=1) - piv.min(axis=1)).abs() / piv[0.0].abs()
+    rel = rel[[t for t in INTERPRETED if t in rel.index]].sort_values(ascending=False)
+    print("\nswing over r = -0.30..+0.30, against each trait's own r = 0 estimate:")
+    for t in rel.index:
+        # the trait labels are Chinese, so pad on display width rather than character count
+        pad = " " * max(0, 30 - sum(2 if unicodedata.east_asian_width(c) in "WF" else 1 for c in t))
+        print("  %s%s %6.1f%%   (%+.4f to %+.4f)"
+              % (t, pad, 100 * rel[t], piv.loc[t].min(), piv.loc[t].max()))
+    print("  largest of the six: %.1f%% (%s)" % (100 * rel.max(), rel.idxmax()))
 
 
 if __name__ == "__main__":
