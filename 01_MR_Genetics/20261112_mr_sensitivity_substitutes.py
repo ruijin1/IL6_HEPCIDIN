@@ -22,6 +22,10 @@ Outputs (one row per trait per method, unless stated):
   sensitivity_loo.csv                 the leave-one-instrument-out estimates themselves
   sensitivity_unmeasured_ld.csv       the one LD pair absent from the reference panel, swept over
                                       r = -0.30, -0.15, 0, +0.15, +0.30
+  sensitivity_ld_range.csv            the same coefficient bounded rather than swept: the interval
+                                      that keeps the correlation matrix positive definite, the value
+                                      implied by transitivity through the other two instruments, the
+                                      estimate at each of those values, and the first sign reversal
 
 Estimators implemented here (no external MR package, so that every step is inspectable):
   IVW_corr   correlation-aware IVW, beta = (g' S^-1 b)/(g' S^-1 g),
@@ -53,6 +57,10 @@ DIR = os.environ.get("MR_DIR", r"D:\il6_hepcidin_work\03-data\MR_finngen")
 OUT = os.environ.get("MR_OUT", DIR)
 TOOLS = ["rs4601580", "rs7514452", "rs6690230", "rs4129267"]
 
+# Grid on which the one unmeasured correlation is bounded. 0.01 rather than 0.05 so that the
+# reported reversal point is the value itself and not the nearest coarse step.
+LD_FINE_GRID = np.round(np.arange(-1.00, 1.0001, 0.01), 2)
+
 # The six traits the manuscript interprets. The LD sweep is summarised over these and not over
 # all fifteen traits in the results table: several of the others sit on coefficients close to
 # zero, so their relative swing is large without saying anything about the estimates that are
@@ -79,6 +87,29 @@ def ld_matrix(names):
             if len(h):
                 S[i, j] = float(h.iloc[0]["r"])
     return S, pos
+
+
+def admissible_range(S, ia, ib, grid=None):
+    """Interval of r(ia, ib) over which the correlation matrix stays positive definite.
+
+    The other five pairwise correlations are fixed, so this one cannot be varied freely: outside
+    the interval no such matrix exists, and a sweep there would be inverting something that is not
+    a correlation matrix. Reporting the interval is therefore stronger than reporting a wide sweep
+    that silently drops the points where the decomposition fails.
+    """
+    grid = LD_FINE_GRID if grid is None else grid
+    ok = []
+    for r in grid:
+        S2 = S.copy()
+        S2[ia, ib] = S2[ib, ia] = r
+        if np.linalg.eigvalsh(S2).min() > 1e-8:
+            ok.append(float(r))
+    return (min(ok), max(ok)) if ok else (np.nan, np.nan)
+
+
+def transitivity(S, ia, ib):
+    """r(ia, ib) implied by each third instrument: r_ik * r_jk, since all four tag one haplotype."""
+    return {k: float(S[ia, k] * S[ib, k]) for k in range(S.shape[0]) if k not in (ia, ib)}
 
 
 def ivw_corr(g, b, se_out, S):
@@ -135,7 +166,9 @@ def main():
     names = [t for t in TOOLS if t in set(res.rsid)]
     S, pos = ld_matrix(names)
 
-    rows, loo_rows, ld_rows = [], [], []
+    ia, ib = names.index("rs4601580"), names.index("rs6690230")
+    LO_FULL, HI_FULL = admissible_range(S, ia, ib)
+    rows, loo_rows, ld_rows, stab_rows = [], [], [], []
     print(f"{'trait':34s} {'k':>2s} {'IVWcorr':>9s} {'p':>9s} {'WM':>9s} "
           f"{'EggerInt':>9s} {'p_int':>7s} {'sign':>5s}")
     for tr in res.trait.unique():
@@ -183,7 +216,6 @@ def main():
               f"{icpt:+9.5f} {p_int:7.3f} {sign_conc}/{len(s)}")
 
         # the one LD coefficient that had to be assumed: sweep it rather than fix it at zero
-        ia, ib = names.index("rs4601580"), names.index("rs6690230")
         for r in (-0.30, -0.15, 0.0, 0.15, 0.30):
             S2 = Ss.copy()
             if ia in idx and ib in idx:
@@ -192,12 +224,48 @@ def main():
             bb2, ss2, _ = ivw_corr(g, b, seo, S2)
             ld_rows.append(dict(trait=tr, r_unmeasured=r, beta=bb2, se=ss2))
 
+        # The same coefficient can be bounded instead of merely swept, using the matrix itself.
+        if ia in idx and ib in idx:
+            pa, pb = idx.index(ia), idx.index(ib)
+            lo_b, hi_b = admissible_range(Ss, pa, pb)
+            impl = transitivity(Ss, pa, pb)
+            at = {}
+            for tag, r in (("implied_low", min(impl.values())),
+                           ("implied_high", max(impl.values())),
+                           ("upper_bound", hi_b)):
+                S2 = Ss.copy()
+                S2[pa, pb] = S2[pb, pa] = r
+                bb2, ss2, _ = ivw_corr(g, b, seo, S2)
+                at[tag] = (float(bb2), float(2 * stats.norm.sf(abs(bb2 / ss2))), float(r))
+            flips = []
+            for r in LD_FINE_GRID:
+                S2 = Ss.copy()
+                S2[pa, pb] = S2[pb, pa] = r
+                if np.linalg.eigvalsh(S2).min() <= 1e-8:
+                    continue
+                bb2, _, _ = ivw_corr(g, b, seo, S2)
+                if np.sign(bb2) != np.sign(beta):
+                    flips.append(float(r))
+            up = [x for x in flips if x > 0]
+            stab_rows.append(dict(
+                trait=tr, beta_r0=float(beta),
+                r_admissible_min=lo_b, r_admissible_max=hi_b,
+                r_implied_low=min(impl.values()), r_implied_high=max(impl.values()),
+                beta_at_implied_low=at["implied_low"][0], p_at_implied_low=at["implied_low"][1],
+                beta_at_implied_high=at["implied_high"][0], p_at_implied_high=at["implied_high"][1],
+                beta_at_upper_bound=at["upper_bound"][0], p_at_upper_bound=at["upper_bound"][1],
+                rel_shift_at_implied=abs(at["implied_high"][0] - beta) / abs(beta),
+                first_sign_reversal=min(up) if up else None,
+                sign_stable_over_range=not flips))
+
     pd.DataFrame(rows).to_csv(os.path.join(OUT, "sensitivity_substitutes.csv"),
                               index=False, encoding="utf-8-sig")
     pd.DataFrame(loo_rows).to_csv(os.path.join(OUT, "sensitivity_loo.csv"),
                                   index=False, encoding="utf-8-sig")
     d = pd.DataFrame(ld_rows)
     d.to_csv(os.path.join(OUT, "sensitivity_unmeasured_ld.csv"), index=False, encoding="utf-8-sig")
+    pd.DataFrame(stab_rows).to_csv(os.path.join(OUT, "sensitivity_ld_range.csv"),
+                                   index=False, encoding="utf-8-sig")
 
     piv = d.pivot(index="trait", columns="r_unmeasured", values="beta")
     print("\nsensitivity to the unmeasured LD pair (rs4601580-rs6690230), beta_IVW:")
@@ -213,6 +281,20 @@ def main():
         print("  %s%s %6.1f%%   (%+.4f to %+.4f)"
               % (t, pad, 100 * rel[t], piv.loc[t].min(), piv.loc[t].max()))
     print("  largest of the six: %.1f%% (%s)" % (100 * rel.max(), rel.idxmax()))
+
+    if stab_rows:
+        st = pd.DataFrame(stab_rows).set_index("trait")
+        print("\nthe unmeasured coefficient, bounded rather than swept:")
+        print("  admissible range, matrix stays positive definite: %+.2f to %+.2f" % (LO_FULL, HI_FULL))
+        print("  largest observed |r| among the four tools: %.3f"
+              % float(np.abs(S[np.triu_indices(len(names), 1)]).max()))
+        for t in [x for x in INTERPRETED if x in st.index]:
+            r = st.loc[t]
+            pad = " " * max(0, 30 - sum(2 if unicodedata.east_asian_width(c) in "WF" else 1 for c in t))
+            rev = ("%+.2f" % r.first_sign_reversal) if pd.notna(r.first_sign_reversal) else "none"
+            print("  %s%s beta %+.5f (%+.5f at implied r %+.2f, shift %.1f%%), first reversal %s"
+                  % (t, pad, r.beta_r0, r.beta_at_implied_high, r.r_implied_high,
+                     100 * r.rel_shift_at_implied, rev))
 
 
 if __name__ == "__main__":
