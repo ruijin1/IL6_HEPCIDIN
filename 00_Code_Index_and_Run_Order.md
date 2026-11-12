@@ -57,7 +57,7 @@
 | Script | Function | Key Conclusion |
 |---|---|---|
 | `20261008_mr_crp_bilirubin.py` | CRP <-> total bilirubin **bidirectional** cis-MR | All negative, very small SE (0.0071-0.093) => credible negative |
-| `20261008_mr_il6_saa_bilirubin.py` | **IL6R / SAA1 pQTL -> bilirubin** (primary analysis) | IL6R positive (+0.0192, p=3.1e-17); SAA1 negative |
+| `20261008_mr_il6_saa_bilirubin.py` | **IL6R / SAA1 pQTL -> bilirubin** (primary analysis), **bidirectional**: also runs the reverse direction (bilirubin instrument rs6754859 -> IL6R pQTL) and the CRP positive control; instruments are re-derived from OpenGWAS at run time (needs `OGWAS_JWT`) | IL6R positive (+0.0192, p=3.1e-17); SAA1 negative; reverse direction, row `Bilirubin -> ebi-a-GCST90012025` of `MR_il6_saa_bilirubin_result.csv`, gives **+0.355 (SE 0.165, p=0.032)** — the reverse estimate quoted in the manuscript; exposure-side F = 1383 |
 | `20261008_mr_il6_saa_secondary.py` | MR for secondary exposures / outcomes | Direction-consistency check |
 | `20261008_mr_ciseqtl_finngen.py` | cis-eQTL MR x FinnGen outcomes | Supplementary exposure |
 | `20261009_mr_il6r_iron_erythroid_finngen.py` | * **IL6R pQTL -> FinnGen R12 quantitative iron/erythroid traits** (15 OMOPIDs, N=5,055-447,271) | Serum iron up, TSAT up, sTfR down, MCV up, MCH up, RDW down |
