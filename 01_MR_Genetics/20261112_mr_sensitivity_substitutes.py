@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-# NOTE: `DIR` below is the author's local working directory, renamed to pure ASCII; it does not
-#       exist outside that machine. No input table is redistributed with this repository: point
-#       `DIR` (or set MR_DIR / MR_OUT) at the directory holding the harmonised input tables.
 r"""* Substitute sensitivity analyses for a four-SNP correlated cis-pQTL instrument set
 
 Scientific question:
@@ -50,6 +47,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+# Local working directory; no input table is distributed with this repository.
 DIR = os.environ.get("MR_DIR", r"D:\workbuddy_workspace\03-data\MR_finngen")
 OUT = os.environ.get("MR_OUT", DIR)
 TOOLS = ["rs4601580", "rs7514452", "rs6690230", "rs4129267"]
