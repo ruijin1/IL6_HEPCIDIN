@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this analysis code, please cite it as below."
-title: "Analysis code for: Culture-proven infection is associated with lower total serum bilirubin in neonates: a retrospective cohort study with genetic and transcriptomic triangulation"
+title: "Analysis code for: Culture-proven neonatal infection: a graded association with total bilirubin and an erythrocyte signature confined to definite pathogens"
 type: software
 authors:
   - family-names: Jin
@@ -22,17 +22,14 @@ authors:
   - family-names: Gao
     given-names: Yan
     affiliation: "Department of Neonatal Medical Center, Lianyungang Maternal and Child Health Hospital, 669 Qindongmen Street, Lianyungang 222006, China"
-version: "1.4.5"
-date-released: "2026-11-13"
+version: "1.5.0"
+date-released: "2026-11-24"
 license: MIT
-repository-code: "https://github.com/ruijin1/IL6_HEPCIDIN"
+repository-code: "https://github.com/ruijin1/IL6_HEPICIDIN"
 keywords:
-  - Mendelian randomisation
-  - colocalisation
   - hepcidin
   - HAMP
   - interleukin-6
-  - IL6R
   - neonatal jaundice
   - bilirubin
   - UGT1A1
@@ -41,11 +38,12 @@ keywords:
   - MIMIC-IV
   - transcriptomics
 abstract: >-
-  Analysis code reproducing every number, table and figure in a triangulation study of IL-6
-  signalling, hepcidin-mediated iron restriction and neonatal bilirubin metabolism. The code
-  covers three evidence layers: two neonatal clinical cohorts (MIMIC-IV v1.0 and MIMIC-III
-  v1.4), genetic analyses (cis-pQTL Mendelian randomisation and colocalisation for IL6R and the
-  HAMP locus), and human hepatocyte transcriptomes from GEO. MIMIC data are access-controlled
-  and are not redistributed; the clinical scripts require a local PostgreSQL instance holding
-  the MIMIC schemas.
+  Analysis code reproducing every number, table and figure in a study of culture-proven neonatal
+  infection, total bilirubin and an erythrocyte signature of iron-restricted erythropoiesis. The
+  code covers two neonatal clinical cohorts (MIMIC-IV v1.0 and MIMIC-III v1.4) and human hepatocyte
+  transcriptomes from GEO, including the phototherapy mediation decomposition reported in the
+  current manuscript. Mendelian randomisation and colocalisation scripts from an earlier version of
+  the work are retained in the repository for audit but are not reported in this manuscript. MIMIC
+  data are access-controlled and are not redistributed; the clinical scripts require a local
+  PostgreSQL instance holding the MIMIC schemas.
 doi: 10.5281/zenodo.23344837

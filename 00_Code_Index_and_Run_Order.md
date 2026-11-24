@@ -1,8 +1,8 @@
 # Code Index and Run Order
 
-**Project**: IL-6 / hepcidin / bilirubin triangulation (clinical database x transcriptome x Mendelian randomization)
+**Project**: IL-6 / hepcidin / bilirubin (clinical databases x hepatocyte transcriptome); Mendelian randomisation and colocalisation retained for audit, not reported in the current manuscript
 **Packaging date**: 2026-10-09
-**Script count**: 59 (Python **52** + R **7**), divided into 5 groups by analysis layer
+**Script count**: 60 (Python **53** + R **7**), divided into 5 groups by analysis layer
 
 > This is the English translation of `03_Code/00_代码清单与运行顺序.md` (original Chinese version preserved unchanged). Local working directories were renamed to ASCII equivalents for public release; no analysis logic or numeric value was altered.
 
@@ -158,7 +158,7 @@
 
 ---
 
-## Group 4: `04_Clinical_MIMIC` (14)
+## Group 4: `04_Clinical_MIMIC` (15)
 
 | Script | Function | Key Result |
 |---|---|---|
@@ -176,6 +176,8 @@
 | **`20261024_bilirubin_conscocci_negative_control.py`** (new) | * **Negative-control (falsification) analysis for the within-subject bilirubin outcome**: rebuilds the 728 pairs exactly as in `20261017_bilirubin_transfusion_robust.py` and reproduces the published estimates before anything new is estimated, then re-expresses the 72 h change with a single three-level exposure (no positive culture / CoNS only / definite pathogen) so that all three groups share one reference, with and without transfusion adjustment. CoNS-positive cultures share the sampling behaviour of a true positive but usually reflect skin-flora contamination | Outputs `F_bilirubin_conscocci_negative_control.csv`; fall **-2.11 mg/dL** after a definite pathogen vs **-0.55 mg/dL** after CoNS only, contrast **-1.54 mg/dL** (-2.94 to -0.15, p 0.030) - a graded rather than all-or-none pattern, so the bilirubin association is only partly specific. **Post hoc** analysis, and labelled as such in the manuscript |
 | **`20261024_erythrocyte_conscocci_negative_control.py`** (new) | * **Pathogen-class stratification of the erythrocyte indices**: Design A of `20261009_mimic_nicu_iron_analysis.py` (mean over postnatal days 3-14, birth weight and postnatal age, OLS with HC3); reproduces MCV -4.82 / MCH -1.65 first, then uses the same three-level exposure | Outputs `F_erythrocyte_conscocci_negative_control.csv`; definite pathogen **MCH -1.64 pg** (-2.49 to -0.80), **MCV -4.76 fL** (-7.43 to -2.08); CoNS only **MCH +0.19** (-0.40 to +0.77), **MCV +0.92** (-1.26 to +3.11); between-stratum contrast **MCH -1.71 (p 0.001)**, **MCV -5.32 (p 0.002)** - the signature is confined to definite pathogens |
 | **`20261031_baseline_table_s6.py`** (new) | * **Baseline characteristics of the MIMIC-III cohort (S1 File, Table S6)**: rebuilds the 710-admission analysis sample of Table 2 (same culture classification as `20261009_mimic_nicu_iron_analysis.py`), and tabulates birth weight, sex, postnatal age at the index measurement, length of stay and in-hospital death by culture result | Outputs `G_baseline_by_exposure.csv`; 710 = 603 (no positive) + 65 (CoNS only) + 42 (definite pathogen); median birth weight 1.58 vs 1.02 kg and length of stay 27.6 vs 43.5 d, which is why every model is adjusted for birth weight and postnatal age |
+
+| **`20261124_phototherapy_mediation.py`** (new) | * **Phototherapy as a mediator, not only as a confounder**: measurement-level model of the MIMIC-III cohort (age <= 28 days; days 0-14; SE clustered by admission). Fits the total-effect model, the same model with an indicator for measurement during phototherapy, and the infection -> phototherapy path, then takes the product of coefficients as the mediated share. Phototherapy intervals are the first-to-last charting span per admission (itemids 3569/3570); negative cultures are recognised by explicit no-growth phrases so that "COAGULASE NEGATIVE" is not miscoded as negative | Outputs `phototherapy_mediation.csv`; total effect **-0.4472** (-0.5345 to -0.3598), exclusion of phototherapy-period measurements **-0.4398 (+1.6%)**, adjustment for measurement during phototherapy **-0.4148**; a path **+0.2543**, b path **-0.1274**, indirect **-0.0324 = 7.2%** of the association. **Post hoc**, and labelled as such in the manuscript |
 
 ---
 
@@ -228,6 +230,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
 | Bilirubin -1.07 (95% CI -1.66~-0.47, p=4e-4), phototherapy-adjusted -1.05, no-phototherapy-only -1.01 | `D_bilirubin_phototherapy_robust.csv` (rows 2, 3, 4) |
 | Table 1 definite-pathogen row 728 (19), -2.11 (-3.45, -0.78), p=0.0019; CoNS-only row 728 (46), p=0.049 | `D_bilirubin_phototherapy_robust.csv` (rows (5)(6), **pair level**; see item 5 of "Points of Caution") |
 | MCV -4.82 fL, MCH -1.65 pg (definite pathogen, n=710/42) | `A_crosssection_results.csv` (row `positive blood culture (non-CoNS)`) |
+| **Phototherapy mediation (post hoc)**: indirect effect a*b -0.0324 against a total effect of -0.4472 log units = **7.2%** of the association; excluding measurements taken during phototherapy changes the estimate by **1.6%** | `phototherapy_mediation.csv` (script `04_Clinical_MIMIC/20261124_phototherapy_mediation.py`) |
 | CoNS contrast (post hoc): MCH -1.71 pg (p 0.001), MCV -5.32 fL (p 0.002); bilirubin -1.54 mg/dL (-2.94 to -0.15, p 0.030); CoNS-only bilirubin -0.55 (-1.10 to -0.002) | `F_erythrocyte_conscocci_negative_control.csv`, `F_bilirubin_conscocci_negative_control.csv` (scripts `20261024_*`) |
 | Fig. 3a CoNS-only rows: MCV +0.92, MCH +0.19, RDW -0.12, HCT -1.04 | `05_Figures_Docs/fig3A_iron_forest_ascii.csv` |
 | Dose-response (**unified to the primary-analysis sample n=710, groups 603 / 78 / 29**): Hct 42.78 / 39.98 / 37.33%; MCV 104.39/103.49/100.96; MCH 35.59/35.18/34.14; RDW 18.32/18.74/19.29 | `fig3B_iron_dose.csv` (see item 6 of "Points of Caution") |

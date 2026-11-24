@@ -1,14 +1,20 @@
-# Analysis code: Culture-proven neonatal infection and lower total serum bilirubin
+# Analysis code: Culture-proven neonatal infection, total bilirubin and an erythrocyte signature
 
 Code accompanying the manuscript:
 
-> **Culture-proven infection is associated with lower total serum bilirubin in neonates: a retrospective cohort study with genetic and transcriptomic triangulation**
+> **Culture-proven neonatal infection: a graded association with total bilirubin and an erythrocyte signature confined to definite pathogens**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
-This repository holds 59 scripts (52 Python, 7 R) that reproduce every number, table and figure
-reported in the manuscript, across three evidence layers: two neonatal clinical cohorts
-(MIMIC-IV v1.0 and MIMIC-III v1.4), genetic analyses (Mendelian randomisation and colocalisation
-for IL6R and the HAMP locus), and human hepatocyte transcriptomes from GEO.
+This repository holds 60 scripts (53 Python, 7 R). The clinical analyses (two neonatal cohorts,
+MIMIC-IV v1.0 and MIMIC-III v1.4) and the hepatocyte transcriptome analyses (GEO) reproduce every
+number, table and figure reported in the current manuscript, including the phototherapy mediation
+decomposition added on 24 November 2026.
+
+**Scope note (24 November 2026).** The manuscript accompanied by this repository now reports the two
+clinical cohorts and the hepatocyte transcriptomes only. The Mendelian randomisation and
+colocalisation analyses in `01_MR_Genetics` and `02_Colocalization` belonged to an earlier version
+of the work; they are retained so that the analysis history stays auditable, but their results are
+**not** reported in the current manuscript and should not be read as manuscript results.
 
 ## Start here
 
@@ -23,7 +29,7 @@ in the manuscript to the script and result file that produces it.
 | `01_MR_Genetics` | 17 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; substitute sensitivity analyses for the correlated four-SNP instrument set (single-instrument Wald ratios, leave-one-instrument-out, weighted median, MR-Egger, LD sensitivity; Table S7); IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
 | `02_Colocalization` | 5 Python, 5 R | Regional data and LD matrices; `coloc.abf` with allele harmonisation and dual windows; SuSiE-based colocalisation |
 | `03_Mechanism_GEO` | 14 Python | Search, download, verification and analysis of the human hepatocyte transcriptomic series, including circadian and replication analyses |
-| `04_Clinical_MIMIC` | 14 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; manuscript tables |
+| `04_Clinical_MIMIC` | 15 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; **phototherapy mediation decomposition (7.2% of the association; 1.6% change when phototherapy periods are excluded)**; manuscript tables |
 | `05_Figures_Docs` | 2 Python, 2 R, 7 CSV | Figure data preparation, all six manuscript figures, the plotting input data for Figures 2-5, and the Markdown-to-Word converter |
 
 ### Superseded and exploratory scripts
