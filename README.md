@@ -2,7 +2,7 @@
 
 Code accompanying the manuscript:
 
-> **Culture-proven neonatal infection: a graded association with total bilirubin and an erythrocyte signature confined to definite pathogens**
+> **Culture-proven neonatal infection: lower total bilirubin and an erythrocyte signature confined to definite pathogens**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
 This repository holds 61 scripts (54 Python, 7 R). The clinical analyses (two neonatal cohorts,
