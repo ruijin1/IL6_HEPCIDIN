@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this analysis code, please cite it as below."
-title: "Analysis code for: Culture-proven neonatal infection: a graded association with total bilirubin and an erythrocyte signature confined to definite pathogens"
+title: "Analysis code for: Culture-proven neonatal infection: lower total bilirubin and an erythrocyte signature confined to definite pathogens"
 type: software
 authors:
   - family-names: Jin
@@ -22,7 +22,7 @@ authors:
   - family-names: Gao
     given-names: Yan
     affiliation: "Department of Neonatal Medical Center, Lianyungang Maternal and Child Health Hospital, 669 Qindongmen Street, Lianyungang 222006, China"
-version: "1.6.0"
+version: "1.7.0"
 date-released: "2026-11-25"
 license: MIT
 repository-code: "https://github.com/ruijin1/IL6_HEPICIDIN"

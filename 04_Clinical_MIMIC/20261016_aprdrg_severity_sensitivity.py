@@ -6,7 +6,10 @@ and then:
   (1) adds the APR-DRG severity-of-illness subclass and the risk-of-mortality subclass;
   (2) restricts to the less severely ill strata;
   (3) refits across specifications that differ in measurement density;
-  (4) reports the E-value for the primary estimate.
+  (4) reports the E-value for the primary estimate;
+  (5) removes the restriction to admissions carrying one of the 13 birth-weight
+      band codes, retaining them with an indicator for an unassignable band
+      (Table S2, last row).
 Severity and mortality are read from the same hosp.drgcodes APR row that supplies the
 birth-weight band, so no additional extraction is required.
 
@@ -161,6 +164,18 @@ def e_value(x):
 
 print("   risk ratio %.4f (CI lower bound %.4f) -> E-value %.2f (CI %.2f)"
       % (rr, lo, e_value(rr), e_value(lo)))
+
+print("\n[5] APR-DRG birth-weight band coverage")
+mb = m.dropna(subset=["logb", "age_d"]).copy()
+mb["no_band"] = mb["apr_bw"].isna().astype(int)
+mb["bw_rank"] = mb["bw_rank"].fillna(0)
+for flag, lab in ((1, "culture-positive"), (0, "unexposed")):
+    s = mb[mb.infect == flag]
+    n_nb = s[s.no_band == 1].hadm_id.nunique()
+    print("   %-16s admissions %d, no birth-weight band %d (%.1f%%)"
+          % (lab, s.hadm_id.nunique(), n_nb, 100.0 * n_nb / max(s.hadm_id.nunique(), 1)))
+fit("logb ~ infect + age_d + bw_rank + no_band", mb, "band coverage",
+    "all admissions, unassignable band retained (Table S2, last row)")
 
 os.makedirs(os.path.dirname(os.path.abspath(OUT)), exist_ok=True)
 with open(OUT, "w", newline="", encoding="utf-8") as f:
