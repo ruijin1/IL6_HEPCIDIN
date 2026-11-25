@@ -158,7 +158,7 @@
 
 ---
 
-## Group 4: `04_Clinical_MIMIC` (15)
+## Group 4: `04_Clinical_MIMIC` (16)
 
 | Script | Function | Key Result |
 |---|---|---|
@@ -178,6 +178,8 @@
 | **`20261031_baseline_table_s6.py`** (new) | * **Baseline characteristics of the MIMIC-III cohort (S1 File, Table S6)**: rebuilds the 710-admission analysis sample of Table 2 (same culture classification as `20261009_mimic_nicu_iron_analysis.py`), and tabulates birth weight, sex, postnatal age at the index measurement, length of stay and in-hospital death by culture result | Outputs `G_baseline_by_exposure.csv`; 710 = 603 (no positive) + 65 (CoNS only) + 42 (definite pathogen); median birth weight 1.58 vs 1.02 kg and length of stay 27.6 vs 43.5 d, which is why every model is adjusted for birth weight and postnatal age |
 
 | **`20261124_phototherapy_mediation.py`** (new) | * **Phototherapy as a mediator, not only as a confounder**: measurement-level model of the MIMIC-III cohort (age <= 28 days; days 0-14; SE clustered by admission). Fits the total-effect model, the same model with an indicator for measurement during phototherapy, and the infection -> phototherapy path, then takes the product of coefficients as the mediated share. Phototherapy intervals are the first-to-last charting span per admission (itemids 3569/3570); negative cultures are recognised by explicit no-growth phrases so that "COAGULASE NEGATIVE" is not miscoded as negative | Outputs `phototherapy_mediation.csv`; total effect **-0.4472** (-0.5345 to -0.3598), exclusion of phototherapy-period measurements **-0.4398 (+1.6%)**, adjustment for measurement during phototherapy **-0.4148**; a path **+0.2543**, b path **-0.1274**, indirect **-0.0324 = 7.2%** of the association. **Post hoc**, and labelled as such in the manuscript |
+
+| **`20261125_paired_episodes_mimiciv.py`** (new) | * **Within-subject replication of the paired −48 h/+72 h design in MIMIC-IV (Table S5, Fig 2b)**: rebuilds the episodes from `work.neo_cx` the way the Methods define them — **admission x collection time x specimen type**, aggregated *before* positivity is assigned, with Gram-stain rows (no organism reported) excluded — then pairs each episode with the last bilirubin in the preceding 48 h and the first in the following 72 h. OLS of the change on culture positivity, adjusted for the sampling interval, the baseline value and postnatal age, with standard errors **clustered by admission**; the two pathogen strata are read off one three-level model sharing the negative-culture reference | Outputs `D_paired_episodes_MIMICIV_clean.csv`; **1,582 paired episodes, 148 positive (9.4%) in 76 of 1,181 admissions**, change **−0.42 mg/dL** (95% CI −0.74 to −0.09, p 0.013); unadjusted −0.30 (−0.61 to +0.01, p 0.058); definite pathogen −0.42 vs CoNS only −0.39 (contrast −0.10, p 0.77); tertiles −0.06 / −0.72 / −0.65 (boundaries 3.6 and 7.9 mg/dL). Reproduces every cell of Table S5. An earlier version of this analysis iterated over `microbiologyevents` rows instead of episodes and therefore counted one positive culture once per organism-antibiotic result (2,261 pairs, 845 positive); that file is superseded and is not distributed |
 
 ---
 
@@ -232,6 +234,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
 | MCV -4.82 fL, MCH -1.65 pg (definite pathogen, n=710/42) | `A_crosssection_results.csv` (row `positive blood culture (non-CoNS)`) |
 | **Phototherapy mediation (post hoc)**: indirect effect a*b -0.0324 against a total effect of -0.4472 log units = **7.2%** of the association; excluding measurements taken during phototherapy changes the estimate by **1.6%** | `phototherapy_mediation.csv` (script `04_Clinical_MIMIC/20261124_phototherapy_mediation.py`) |
 | CoNS contrast (post hoc): MCH -1.71 pg (p 0.001), MCV -5.32 fL (p 0.002); bilirubin -1.54 mg/dL (-2.94 to -0.15, p 0.030); CoNS-only bilirubin -0.55 (-1.10 to -0.002) | `F_erythrocyte_conscocci_negative_control.csv`, `F_bilirubin_conscocci_negative_control.csv` (scripts `20261024_*`) |
+| **MIMIC-IV within-subject (Table S5, Fig 2b)**: 1,582 paired episodes / 148 positive (76 admissions) / change −0.42 mg/dL (−0.74 to −0.09, p 0.013); unadjusted −0.30 (−0.61 to +0.01); definite pathogen −0.42 vs CoNS −0.39, contrast −0.10 (p 0.77); tertiles −0.06 / −0.72 / −0.65 | `D_paired_episodes_MIMICIV_clean.csv` (1,582 rows, one row per episode; script `04_Clinical_MIMIC/20261125_paired_episodes_mimiciv.py`) |
 | Fig. 3a CoNS-only rows: MCV +0.92, MCH +0.19, RDW -0.12, HCT -1.04 | `05_Figures_Docs/fig3A_iron_forest_ascii.csv` |
 | Dose-response (**unified to the primary-analysis sample n=710, groups 603 / 78 / 29**): Hct 42.78 / 39.98 / 37.33%; MCV 104.39/103.49/100.96; MCH 35.59/35.18/34.14; RDW 18.32/18.74/19.29 | `fig3B_iron_dose.csv` (see item 6 of "Points of Caution") |
 | All three transfusion robustness versions held | `C_transfusion_robust_results.csv` (32 rows = 4 metrics x 2 exposures x 4 models) |
@@ -245,7 +248,7 @@ the table below lists the key correspondences (for use by reviewers or reproduce
 | LD r² 0.00-0.437 (between instruments) | `ld_il6r_tools.csv` (10 of 12 ordered pairs); the missing pair is described in item 4 of "Points of Caution" below |
 | r² between leads 0.000-0.058 | `_ld_leads_vs_outcomes.json`, `_coloc_ld_verdict.json` |
 
-**8 Points of Caution (that reviewers may ask about)**
+**9 Points of Caution (that reviewers may ask about)**
 
 1. **Cohort flow: the MIMIC-IV side is now fully closed (added 2026-10-10)**.
    A new `20261010_cohort_flow.py` -> `04_Results/04_Clinical_MIMIC/cohort_flow.csv`, recomputed against the database and written to disk:
@@ -312,4 +315,6 @@ the table below lists the key correspondences (for use by reviewers or reproduce
    subject to the PhysioNet data use agreement, and **must not be publicly released with the manuscript**, so they are not placed in the submission package `04_Results/`;
    the main-text "Data availability" statement already declares that they must be obtained via PhysioNet credentials, and that derived data tables are available from the corresponding author on request.
    What is kept in the submission package is the **result layer** and the **figure-data layer**, which is sufficient to verify all reported values.
+
+9. **MIMIC-IV within-subject episodes: the aggregation unit was corrected on 2026-11-25.** An earlier version of this analysis (`paired_replication_mimiciv.py`, October 2026, superseded and not distributed) iterated over the rows of `microbiologyevents`. Because one positive culture contributes one row per organism-antibiotic susceptibility result plus a Gram-stain row with no organism, a single positive culture could enter the file up to 20 times and a Gram-stain row could be counted as a negative culture. The file produced that way (2,261 pairs, 845 positive, −0.96 mg/dL) is therefore not a pair-level dataset and is withdrawn; no number in the current manuscript comes from it. `20261125_paired_episodes_mimiciv.py` aggregates at admission x collection time x specimen type before assigning positivity, drops Gram-stain rows, and reproduces every cell of Table S5 (1,582 pairs, 148 positive, −0.42 mg/dL, 95% CI −0.74 to −0.09). Reviewers comparing this release with version 1.5.0 will see the change in the paired estimates and in Fig 2b; the cross-sectional estimates (7,803 measurements, −0.355) and all MIMIC-III numbers are unaffected, because they never used this file.
 

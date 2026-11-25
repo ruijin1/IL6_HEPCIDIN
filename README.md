@@ -5,10 +5,11 @@ Code accompanying the manuscript:
 > **Culture-proven neonatal infection: a graded association with total bilirubin and an erythrocyte signature confined to definite pathogens**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
-This repository holds 60 scripts (53 Python, 7 R). The clinical analyses (two neonatal cohorts,
+This repository holds 61 scripts (54 Python, 7 R). The clinical analyses (two neonatal cohorts,
 MIMIC-IV v1.0 and MIMIC-III v1.4) and the hepatocyte transcriptome analyses (GEO) reproduce every
 number, table and figure reported in the current manuscript, including the phototherapy mediation
-decomposition added on 24 November 2026.
+decomposition added on 24 November 2026 and the MIMIC-IV within-subject replication added on
+25 November 2026.
 
 **Scope note (24 November 2026).** The manuscript accompanied by this repository now reports the two
 clinical cohorts and the hepatocyte transcriptomes only. The Mendelian randomisation and
@@ -29,7 +30,7 @@ in the manuscript to the script and result file that produces it.
 | `01_MR_Genetics` | 17 Python | IL6R cis-pQTL and HAMP instruments; MR on neonatal jaundice, bilirubin and erythrocyte indices; substitute sensitivity analyses for the correlated four-SNP instrument set (single-instrument Wald ratios, leave-one-instrument-out, weighted median, MR-Egger, LD sensitivity; Table S7); IL6R fine-mapping and credible set; instrument independence checks; FinnGen R12 retrieval |
 | `02_Colocalization` | 5 Python, 5 R | Regional data and LD matrices; `coloc.abf` with allele harmonisation and dual windows; SuSiE-based colocalisation |
 | `03_Mechanism_GEO` | 14 Python | Search, download, verification and analysis of the human hepatocyte transcriptomic series, including circadian and replication analyses |
-| `04_Clinical_MIMIC` | 15 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; **phototherapy mediation decomposition (7.2% of the association; 1.6% change when phototherapy periods are excluded)**; manuscript tables |
+| `04_Clinical_MIMIC` | 16 Python | Cohort construction from the local MIMIC databases; bilirubin and phototherapy models; erythrocyte-index models with transfusion adjustment; transfusion adjustment for the within-subject bilirubin outcome; APR-DRG severity-of-illness sensitivity analysis; **phototherapy mediation decomposition (7.2% of the association; 1.6% change when phototherapy periods are excluded)**; **within-subject (48 h before / 72 h after) replication of the paired design in MIMIC-IV (1,582 pairs, 148 positive; -0.42 mg/dL, 95% CI -0.74 to -0.09)**; manuscript tables |
 | `05_Figures_Docs` | 2 Python, 2 R, 7 CSV | Figure data preparation, all six manuscript figures, the plotting input data for Figures 2-5, and the Markdown-to-Word converter |
 
 ### Superseded and exploratory scripts
@@ -116,7 +117,7 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.4.5.
+version 1.6.0.
 
 ## License
 
