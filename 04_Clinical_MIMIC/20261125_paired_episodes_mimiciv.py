@@ -159,14 +159,30 @@ for key, lab in [("def", "definite pathogen (non-CoNS)"),
           % (lab, int(r3.nobs), int((P.cls == key).sum()),
              r3.params[k], ci3.loc[k, 0], ci3.loc[k, 1], r3.pvalues[k]))
 
-# Contrast within the culture-positive pairs only (definite versus CoNS), same covariates.
+# Contrast reported in Table S5: the model-based difference of the two coefficients in the
+# three-level fit above, so that the two stratum rows and the contrast share one reference and
+# one covariance matrix. Differencing rounded coefficients, or taking the contrast from a
+# different (positive-only) model, gives a number that does not reconcile with the rows.
+from scipy import stats as _st
+
+kd = [c for c in r3.params.index if c.endswith("[T.def]")][0]
+kc = [c for c in r3.params.index if c.endswith("[T.cons]")][0]
+diff = r3.params[kd] - r3.params[kc]
+V = r3.cov_params()
+se_d = np.sqrt(V.loc[kd, kd] + V.loc[kc, kc] - 2 * V.loc[kd, kc])
+p_d = 2 * (1 - _st.norm.cdf(abs(diff / se_d)))
+print("  %-46s n=%4d        %+.3f (%+.3f to %+.3f)  p=%.3g"
+      % ("contrast: definite minus CoNS (three-level)", int(r3.nobs),
+         diff, diff - 1.96 * se_d, diff + 1.96 * se_d, p_d))
+
+# Audit only, not tabulated: the same contrast within the 148 culture-positive pairs.
 d = P[P.cls.isin(["def", "cons"])].copy()
 d["isdef"] = (d.cls == "def").astype(int)
 rc = smf.ols("delta ~ isdef + gap_h + pre + age_d", data=d).fit(
     cov_type="cluster", cov_kwds={"groups": d.hadm_id})
 cic = rc.conf_int().loc["isdef"]
-print("  %-46s n=%4d        %+.2f (%+.2f to %+.2f)  p=%.3g"
-      % ("contrast: definite minus CoNS only", int(rc.nobs),
+print("  %-46s n=%4d        %+.3f (%+.3f to %+.3f)  p=%.3g"
+      % ("audit: within-positive pairs only", int(rc.nobs),
          rc.params.isdef, cic[0], cic[1], rc.pvalues.isdef))
 
 print("\nTable S5 - baseline-bilirubin tertiles")
