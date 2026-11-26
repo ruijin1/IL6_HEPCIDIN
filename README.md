@@ -117,7 +117,22 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.7.1.
+version 1.7.2.
+
+## Revision note (26 November 2026)
+
+Two methodological corrections affect the three-level pathogen analyses and are the reason for
+release 1.7.2. In both cohorts the two stratum coefficients and the contrast between them now come
+from **one** model with culture-negative episodes as the shared reference, and the contrast is
+taken from that model's coefficients and covariance matrix:
+
+| Analysis | Before | After |
+|---|---|---|
+| MIMIC-III, definite vs CoNS | coefficients from one model, contrast from another | −2.16 vs −0.61, contrast −1.54 (p 0.030), all from the three-level model |
+| MIMIC-IV, definite vs CoNS | contrast from a positive-pairs-only model | −0.42 vs −0.39, contrast −0.04 (−0.69 to 0.62, p 0.91), from the three-level model; the positive-pairs-only contrast (−0.10) is printed for audit only |
+
+Subtracting two rounded coefficients from different models does not reproduce a model-based
+contrast; that is what the earlier versions effectively invited.
 
 ## License
 
