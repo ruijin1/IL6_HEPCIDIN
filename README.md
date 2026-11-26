@@ -117,9 +117,11 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.7.5.
+version 1.7.6.
 
 ## Revision note (26 November 2026)
+
+**Release 1.7.6 (Fig. 2a plotting data).** The plotting-input CSV for Fig. 2a (<code>05_Figures_Docs/fig2A_bilirubin_mimic3_ascii.csv</code>) held the pre-1.7.3 pathogen-class counts (19 definite / 46 CoNS; -2.11 / -0.55 mg/dL) while every analysis script and the manuscript already used the unified rule (20 / 45; -2.08 / -0.61 mg/dL). Corrected so the archived data reproduce the published Fig. 2a and Table 1; no estimate, table or conclusion changes.
 
 **Release 1.7.5 (MIMIC-IV erythrocyte replication).** The erythrocyte signature reported in
 MIMIC-III is now replicated cross-sectionally in the MIMIC-IV hospital module
