@@ -80,14 +80,17 @@ def fit(tag, d, formula, term="positive"):
                 b=m.params[term], lo=ci[0], hi=ci[1], p=m.pvalues[term])
 
 res = []
-print("\n-- reproduction of published Table 1 rows --")
+print("\n-- published Table 1 rows 2-5 (positive vs negative) --")
 res.append(fit("Main model (positive vs negative)", P, "delta ~ positive"))
 res.append(fit("Adjusted for interval and baseline", P, "delta ~ positive + gap_h + pre"))
-res.append(fit("Definite pathogen (reference = all negatives)", P, "delta ~ pos_definite + gap_h + pre",
+print("\n-- indicator models, reference = every other pair (superseded; kept for audit) --")
+print("   The published Table 1 stratum rows take their coefficients from the three-level model")
+print("   below, so that the two strata and their contrast share one reference and one covariance.")
+res.append(fit("Definite pathogen (indicator, reference = all other pairs)", P, "delta ~ pos_definite + gap_h + pre",
                term="pos_definite"))
 
-print("\n-- negative control: CoNS-only positive cultures --")
-res.append(fit("CoNS-only (reference = all negatives)", P, "delta ~ pos_cons + gap_h + pre", term="pos_cons"))
+print("\n-- negative control: CoNS-only positive cultures (indicator, reference = all other pairs) --")
+res.append(fit("CoNS-only (indicator, reference = all other pairs)", P, "delta ~ pos_cons + gap_h + pre", term="pos_cons"))
 
 print("\n-- three-level model, negative cultures as reference --")
 P["grp"] = np.select([P.pos_definite == 1, P.pos_cons == 1], ["definite", "cons"], default="negative")
