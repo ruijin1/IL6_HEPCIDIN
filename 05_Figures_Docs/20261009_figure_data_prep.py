@@ -142,6 +142,16 @@ def fig3A():
     d["outcome_base"] = d.outcome.astype(str).str.replace(r"\(preTx\)$", "", regex=True).str.upper()
     d["model_en"] = d.model.replace(FIG3A_MODEL_EN)
     d["exposure_en"] = d.exposure.replace(FIG3A_EXPOSURE_EN)
+    # CoNS-only main-model rows were previously appended by hand to fig3A_iron_forest.csv;
+    # they are generated here so the figure is reproducible from the archived code.
+    # (2026-11-26: the values changed when the pathogen-class rule was unified.)
+    c = pd.read_csv(os.path.join(IRON, "F_erythrocyte_conscocci_negative_control.csv"), encoding="utf-8-sig")
+    c = c[(c.analysis == "CoNS-only positive culture")].copy()
+    c["outcome_base"] = c.outcome.astype(str).str.upper()
+    c["model_en"] = "Main analysis"
+    c["exposure_en"] = "CoNS only"
+    c = c.rename(columns={"b": "b", "lo": "lo", "hi": "hi"})[["outcome_base", "model_en", "exposure_en", "n", "ncase", "b", "lo", "hi", "p"]]
+    d = pd.concat([d, c], ignore_index=True)
     d.to_csv(os.path.join(OUT, "fig3A_iron_forest.csv"), index=False, encoding="utf-8-sig")
     write_ascii(d, "fig3A_iron_forest",
                 ["outcome_base", "model_en", "exposure_en", "n", "ncase", "b", "lo", "hi", "p"])
