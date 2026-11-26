@@ -117,9 +117,18 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.7.3.
+version 1.7.4.
 
 ## Revision note (26 November 2026)
+
+**Release 1.7.4 (culture-to-index interval).** The culture-to-measurement interval analysis
+(`20261015_culture_to_index_interval.py`) still used the pre-1.7.3 organism rule. Recomputed under the
+unified rule, the definite-pathogen group contains 45 admissions, of which 23 had at least one
+post-culture erythrocyte-index measurement in the days 3–14 window and 22 had measurements only before
+the culture; the median interval is 2.5 days (IQR 1.7–3.1, range 0.5–12.7). The sensitivity variants
+give 2.3 days (all definite episodes as anchors), 2.8 days (mean rather than median post-culture time)
+and 2.5 days (four reported indices only). The code index now reports 45 definite admissions and 23 of
+45 with a post-culture measurement in place of the earlier 42 and 22 of 42.
 
 **Release 1.7.3 (pathogen-class rule).** The MIMIC-III scripts used to classify a culture as
 coagulase-negative when the organism string *contained* "staphylococcus". A culture growing a CoNS

@@ -13,8 +13,9 @@ Definitions (identical to those used for Table 2)
 * Postnatal day      = (laboratory collection time - date of birth) expressed in days.
 * Measurement window = postnatal days 3-14 (inclusive), using the same variable list as the
                        cross-sectional aggregation: MCV, MCH, MCHC, RDW and haematocrit.
-* Definite pathogen  = positive blood culture in which none of the isolated organisms matched
-                       "staphylococcus" or "coagulase negative".
+* Definite pathogen  = positive blood culture in which at least one isolated organism is not
+                       a coagulase-negative staphylococcus (a mixed culture containing any
+                       non-CoNS organism therefore counts as definite).
 * Index time         = median chronological time of those window measurements obtained AFTER
                        the first definite-pathogen culture of the admission.
 * Interval           = index time - culture collection time (days).
@@ -33,6 +34,24 @@ OUTDIR = DIR
 # does not match any label in the extracted table (haemoglobin arrives as hb_heme / hb_bg),
 # so the window aggregates five indices: mcv, mch, mchc, rdw, hct.
 WINVARS = ["mcv", "mch", "mchc", "rdw", "hb", "hct"]
+
+
+def is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o:
+        return True
+    if "aureus" in o:
+        return False
+    if "coagulase negative" in o:
+        return True
+    return o in ("staphylococcus", "staph")
+
+
+def row_is_definite(s):
+    if pd.isna(s):
+        return False
+    parts = [p.strip() for p in str(s).replace(";", ",").split(",") if p.strip()]
+    return bool(parts) and any(not is_cons_org(p) for p in parts)
 
 
 def load():
@@ -62,9 +81,9 @@ def main():
     base = base.merge(bw, left_on="hadm_id", right_index=True, how="left")
 
     cul = cul[cul.hadm_id.isin(base.hadm_id)]
-    pos = cul[cul.positive == 1]
-    pos_clean = pos[~pos.orgs.astype(str).str.lower().str.contains(
-        "staphylococcus|coagulase negative", na=False)]
+    pos = cul[cul.positive == 1].copy()
+    pos["definite_row"] = pos.orgs.apply(row_is_definite)
+    pos_clean = pos[pos.definite_row]
 
     exp = pd.DataFrame(index=base.hadm_id.values)
     exp["pos_blood"] = base.set_index("hadm_id").index.isin(pos.hadm_id).astype(int)
@@ -86,8 +105,8 @@ def main():
 
     print("analysis sample n = %d (any-positive %d, definite non-CoNS %d)"
           % (len(wide), int(wide.pos_blood.sum()), int(wide.pos_blood_noncons.sum())))
-    assert len(wide) == 710 and int(wide.pos_blood_noncons.sum()) == 42, \
-        "sample does not reproduce the published n=710 / 42"
+    assert len(wide) == 710 and int(wide.pos_blood_noncons.sum()) == 45, \
+        "sample does not reproduce the published n=710 / 45"
 
     # ---- interval ----
     definite = wide.index[wide.pos_blood_noncons == 1].tolist()

@@ -22,8 +22,8 @@ authors:
   - family-names: Gao
     given-names: Yan
     affiliation: "Department of Neonatal Medical Center, Lianyungang Maternal and Child Health Hospital, 669 Qindongmen Street, Lianyungang 222006, China"
-version: "1.7.3"
-date-released: "2026-11-25"
+version: "1.7.4"
+date-released: "2026-11-26"
 license: MIT
 repository-code: "https://github.com/ruijin1/IL6_HEPICIDIN"
 keywords:
