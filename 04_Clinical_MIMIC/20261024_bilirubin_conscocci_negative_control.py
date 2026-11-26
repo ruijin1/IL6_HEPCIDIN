@@ -25,6 +25,32 @@ import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
 
+
+# --- pathogen class (corrected 2026-11-26) -------------------------------------------------
+# A culture is CoNS-only only when EVERY organism reported is a coagulase-negative
+# staphylococcus.  S. aureus and any co-isolate make the culture a definite pathogen.
+# This is the rule the MIMIC-IV script already used; the earlier MIMIC-III scripts used a
+# substring test on the whole organism string, which sent "CoNS + another organism" to CoNS.
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o:
+        return True
+    if "aureus" in o:
+        return False
+    if "coagulase negative" in o:
+        return True
+    return o in ("staphylococcus", "staph")
+
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
 DIR = (sys.argv[1] if len(sys.argv) > 1 else
        os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 OUT = os.path.join(DIR, "F_bilirubin_conscocci_negative_control.csv")
@@ -48,8 +74,7 @@ def build_pairs():
         post = g[(g.charttime > t0) & (g.charttime <= t1)]
         if not len(pre) or not len(post):
             continue
-        cu_is_cons = int(("staphylococcus" in str(cu.orgs).lower())
-                         or ("coagulase negative" in str(cu.orgs).lower()))
+        cu_is_cons = int(culture_is_cons_only(cu.orgs))
         rows.append(dict(hadm_id=cu.hadm_id, positive=int(cu.positive), cu_is_cons=cu_is_cons,
                          pre=pre.valuenum.iloc[-1], post=post.valuenum.iloc[0],
                          delta=post.valuenum.iloc[0] - pre.valuenum.iloc[-1],

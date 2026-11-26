@@ -117,9 +117,28 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.7.2.
+version 1.7.3.
 
 ## Revision note (26 November 2026)
+
+**Release 1.7.3 (pathogen-class rule).** The MIMIC-III scripts used to classify a culture as
+coagulase-negative when the organism string *contained* "staphylococcus". A culture growing a CoNS
+together with another organism was therefore placed in the CoNS stratum, whereas the MIMIC-IV script
+already required that every organism be a CoNS. All MIMIC-III scripts now apply that rule, which was
+already the definition given in the manuscript:
+
+| Analysis | 1.7.2 | 1.7.3 |
+|---|---|---|
+| MIMIC-III pairs, definite / CoNS-only | 19 / 46 | 20 / 45 |
+| Within-subject fall, definite vs CoNS (mg/dL) | −2.16 vs −0.61 | −2.08 vs −0.61 |
+| Within-subject contrast (p) | −1.54 (0.030) | −1.47 (0.032) |
+| Erythrocyte cohort, definite / CoNS-only | 42 / 65 | 45 / 62 |
+| MCV, definite (fL) | −4.82 | −4.20 |
+| MCH, definite (pg) | −1.65 | −1.44 |
+| Three-level contrast, MCV / MCH | −5.32 / −1.71 | −4.54 / −1.44 |
+
+The conclusion is unchanged: the erythrocyte signature remains confined to definite pathogens and
+the bilirubin fall remains graded only in MIMIC-III.
 
 Two methodological corrections affect the three-level pathogen analyses and are the reason for
 release 1.7.2. In both cohorts the two stratum coefficients and the contrast between them now come

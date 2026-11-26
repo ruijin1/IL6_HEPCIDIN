@@ -24,7 +24,34 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
-DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
+
+# --- pathogen class (corrected 2026-11-26) -------------------------------------------------
+# A culture is CoNS-only only when EVERY organism reported is a coagulase-negative
+# staphylococcus.  S. aureus and any co-isolate make the culture a definite pathogen.
+# This is the rule the MIMIC-IV script already used; the earlier MIMIC-III scripts used a
+# substring test on the whole organism string, which sent "CoNS + another organism" to CoNS.
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o:
+        return True
+    if "aureus" in o:
+        return False
+    if "coagulase negative" in o:
+        return True
+    return o in ("staphylococcus", "staph")
+
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
+DIR = (sys.argv[1] if len(sys.argv) > 1 else
+       os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 OUT = DIR
 
 CONT = ["mcv", "mch", "mchc", "rdw", "hb", "hct", "retic", "bili_total"]
@@ -68,7 +95,7 @@ def main():
     cul = cul[cul.hadm_id.isin(base.hadm_id)]
     pos = cul[cul.positive == 1]
     pos_orgs = ", ".join(pos.orgs.dropna().astype(str))
-    pos_clean = pos[~pos.orgs.astype(str).str.lower().str.contains("staphylococcus|coagulase negative", na=False)]
+    pos_clean = pos[pos.orgs.map(culture_is_definite)]
     exp = pd.DataFrame(index=base.hadm_id.values)
     exp["any_culture"] = base.set_index("hadm_id").index.isin(cul.hadm_id).astype(int)
     exp["pos_blood"] = base.set_index("hadm_id").index.isin(pos.hadm_id).astype(int)

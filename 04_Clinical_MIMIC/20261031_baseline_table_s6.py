@@ -8,6 +8,24 @@ import sys
 import numpy as np
 import pandas as pd
 
+
+# --- pathogen class (corrected 2026-11-26): CoNS-only only when EVERY organism is CoNS ---
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o: return True
+    if "aureus" in o: return False
+    if "coagulase negative" in o: return True
+    return o in ("staphylococcus", "staph")
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
+
 DIR = (sys.argv[1] if len(sys.argv) > 1
        else os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 
@@ -32,8 +50,7 @@ pos = cul[cul.positive == 1].copy()
 # Definition of the published analyses (20261009_mimic_nicu_iron_analysis.py):
 # a definite pathogen is any organism row whose name does not contain "staphylococcus" or
 # "coagulase negative"; CoNS-only admissions are positive admissions with no such row.
-org = pos.orgs.astype(str).str.lower()
-clean = pos[~org.str.contains("staphylococcus|coagulase negative", na=False)]
+clean = pos[pos.orgs.map(culture_is_definite)]
 definite_hadm = set(clean.hadm_id)
 cons_hadm = set(pos.hadm_id) - definite_hadm
 

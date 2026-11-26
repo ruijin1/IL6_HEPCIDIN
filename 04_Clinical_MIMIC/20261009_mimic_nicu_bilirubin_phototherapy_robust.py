@@ -19,6 +19,24 @@ import pandas as pd
 import psycopg2
 import statsmodels.formula.api as smf
 
+
+# --- pathogen class (corrected 2026-11-26): CoNS-only only when EVERY organism is CoNS ---
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o: return True
+    if "aureus" in o: return False
+    if "coagulase negative" in o: return True
+    return o in ("staphylococcus", "staph")
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
+
 DIR = r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"
 CONN = dict(host="localhost", port=5432, user="postgres", password="1234", dbname="mimiciii")
 
@@ -68,8 +86,7 @@ def main():
                          ph_in_win=int(len(hp) > 0), ph_around=int(len(hp_pre) > 0),
                          any_ph_icd=int(cu.hadm_id in ph_icd),
                          # whether this pair's own culture is CoNS (for pair-level stratification, see (5)/(6))
-                         cu_is_cons=int(('staphylococcus' in str(cu.orgs).lower())
-                                        or ('coagulase negative' in str(cu.orgs).lower()))
+                         cu_is_cons=int(culture_is_cons_only(cu.orgs))
                          ))
     P = pd.DataFrame(rows)
     print("\n   pairs = %d (positive %d)" % (len(P), int(P.positive.sum())))

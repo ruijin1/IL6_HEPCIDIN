@@ -24,6 +24,24 @@ import pandas as pd
 import psycopg2
 import statsmodels.formula.api as smf
 
+
+# --- pathogen class (corrected 2026-11-26): CoNS-only only when EVERY organism is CoNS ---
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o: return True
+    if "aureus" in o: return False
+    if "coagulase negative" in o: return True
+    return o in ("staphylococcus", "staph")
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '04_Results'))
 
@@ -177,10 +195,7 @@ keep = {r['hadm_id'] for r in base if r['age_days_at_icu'].strip() and float(r['
 c = [r for r in cul if r['hadm_id'] in keep]
 posr = [r for r in c if (r.get('positive') or '').strip() in ('1', 'True', 'true')]
 hpos = {r['hadm_id'] for r in posr}
-noncons = {r['hadm_id'] for r in posr
-           if (r.get('orgs') or '')
-           and 'staphylococcus' not in (r.get('orgs') or '').lower()
-           and 'coagulase negative' not in (r.get('orgs') or '').lower()}
+noncons = {r['hadm_id'] for r in posr if culture_is_definite(r.get('orgs') or '')}
 rows += [
     ('MIMIC-III', 'NICU stays (first_careunit=NICU), before the age filter', len(all_ids), 'nicu_base.csv', 'nicu_base.csv'),
     ('MIMIC-III', 'admissions with age at ICU entry <= 28 d (analysis cohort)', len(keep), 'age_days_at_icu <= 28', 'nicu_base.csv'),

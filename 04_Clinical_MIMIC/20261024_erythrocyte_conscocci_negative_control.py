@@ -19,6 +19,23 @@ DIR = (sys.argv[1] if len(sys.argv) > 1 else
        os.environ.get("MIMIC_CSV_DIR", r"D:\il6_hepcidin_work\03-data\MIMIC_NICU_iron"))
 OUT = os.path.join(DIR, "F_erythrocyte_conscocci_negative_control.csv")
 
+
+# --- pathogen class (corrected 2026-11-26): CoNS-only only when EVERY organism is CoNS ---
+def _is_cons_org(name):
+    o = str(name).lower().strip()
+    if not o: return True
+    if "aureus" in o: return False
+    if "coagulase negative" in o: return True
+    return o in ("staphylococcus", "staph")
+
+def culture_is_cons_only(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and all(_is_cons_org(p) for p in parts)
+
+def culture_is_definite(orgs):
+    parts = [p.strip() for p in str(orgs).split(",") if p.strip()]
+    return bool(parts) and any(not _is_cons_org(p) for p in parts)
+
 base = pd.read_csv(os.path.join(DIR, "nicu_base.csv"), encoding="utf-8-sig",
                    parse_dates=["dob", "admittime", "intime", "outtime"])
 lab = pd.read_csv(os.path.join(DIR, "nicu_cbc.csv"), encoding="utf-8-sig", parse_dates=["charttime"])
@@ -32,8 +49,8 @@ base = base[base.age_days_at_icu <= 28].copy().merge(bw, left_on="hadm_id", righ
 cul = cul[cul.hadm_id.isin(base.hadm_id)]
 
 pos = cul[cul.positive == 1]
-cons_mask = pos.orgs.astype(str).str.lower().str.contains("staphylococcus|coagulase negative", na=False)
-pos_clean = pos[~cons_mask]
+cons_mask = pos.orgs.map(culture_is_cons_only)
+pos_clean = pos[pos.orgs.map(culture_is_definite)]
 
 idx = base.set_index("hadm_id").index
 exp = pd.DataFrame(index=idx)
@@ -68,17 +85,17 @@ def fit(tag, y, d, formula, term):
     return m
 
 print("\n-- reproduction of the published definite-pathogen estimates --")
-for y in ["mcv", "mch", "rdw"]:
+for y in ["mcv", "mch", "rdw", "hct"]:
     fit("Definite pathogen (published specification)", y, wide, "%s ~ pos_noncons + bw_kg + dol_mean" % y, "pos_noncons")
 
 print("\n-- CoNS-only stratum, reference = no positive culture --")
-for y in ["mcv", "mch", "rdw"]:
+for y in ["mcv", "mch", "rdw", "hct"]:
     fit("CoNS-only positive culture", y, wide, "%s ~ cons_only + bw_kg + dol_mean" % y, "cons_only")
 
 print("\n-- three-level model within one specification --")
 wide["g_def"] = wide.pos_noncons
 wide["g_cons"] = wide.cons_only
-for y in ["mcv", "mch", "rdw"]:
+for y in ["mcv", "mch", "rdw", "hct"]:
     m = fit("Three-level: definite pathogen", y, wide, "%s ~ g_def + g_cons + bw_kg + dol_mean" % y, "g_def")
     fit("Three-level: CoNS-only", y, wide, "%s ~ g_def + g_cons + bw_kg + dol_mean" % y, "g_cons")
     dfi = m.params["g_def"] - m.params["g_cons"]
@@ -92,7 +109,7 @@ for y in ["mcv", "mch", "rdw"]:
 print("\n-- unadjusted means --")
 wide["grp"] = np.where(wide.pos_noncons == 1, "definite", np.where(wide.cons_only == 1, "cons", "none"))
 for g, gg in wide.groupby("grp"):
-    print("  %-9s n=%3d  MCV %6.2f  MCH %5.2f  RDW %5.2f" % (g, len(gg), gg.mcv.mean(), gg.mch.mean(), gg.rdw.mean()))
+    print("  %-9s n=%3d  MCV %6.2f  MCH %5.2f  RDW %5.2f  Hct %6.2f" % (g, len(gg), gg.mcv.mean(), gg.mch.mean(), gg.rdw.mean(), gg.hct.mean()))
 
 pd.DataFrame(rows).to_csv(OUT, index=False, encoding="utf-8-sig")
 print("\nsaved:", OUT)
