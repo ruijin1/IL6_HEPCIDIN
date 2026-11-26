@@ -117,9 +117,18 @@ regenerated without editing the source.
 If you use this code, please cite the manuscript above and the archived release. The code is
 archived on Zenodo under the permanent DOI `10.5281/zenodo.23344837`, which always resolves to the
 latest release and is also listed in `CITATION.cff`; the release corresponding to the manuscript is
-version 1.7.4.
+version 1.7.5.
 
 ## Revision note (26 November 2026)
+
+**Release 1.7.5 (MIMIC-IV erythrocyte replication).** The erythrocyte signature reported in
+MIMIC-III is now replicated cross-sectionally in the MIMIC-IV hospital module
+(`20261126_mimiciv_erythrocyte_crosssectional.py`, Table S8, Fig. 3c). In 1,132 admissions with a
+birth-weight band and an index on postnatal days 3–14, a definite pathogen was associated with lower
+MCV (−2.08 fL, p = 0.004) and MCH (−0.63 pg, p = 0.004), whereas CoNS-only cultures showed no
+difference (MCV +1.39 fL, p = 0.13; MCH +0.41 pg, p = 0.16) and RDW did not differ (p = 0.67). The
+pattern reproduces at about half the MIMIC-III effect size. Transfusion could not be adjusted for and
+no transfusion procedure code was identified in these admissions.
 
 **Release 1.7.4 (culture-to-index interval).** The culture-to-measurement interval analysis
 (`20261015_culture_to_index_interval.py`) still used the pre-1.7.3 organism rule. Recomputed under the
