@@ -178,7 +178,7 @@ def main():
     ap.add_argument("--skip-download-check", action="store_true")
     a = ap.parse_args()
     print("OpenGWAS cis-eQTL x FinnGen R12 preterm MR  %s" % time.strftime("%Y-%m-%d %H:%M"))
-    print("token: %s" % ("read from environment variable (not persisted)" if JWT else "**missing**"))
+    print("token: %s" % ("read from environment variable (not persisted)" if JWT else "MISSING"))
     print()
     ins = step1_instruments()
     rsids = [k.get("rsid") for v in ins.values() for k in v]

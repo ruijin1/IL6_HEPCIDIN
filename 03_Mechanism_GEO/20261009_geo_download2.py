@@ -64,8 +64,8 @@ for url, name in JOBS:
         os.replace(tmp, fp)
         ls2 = os.path.getsize(fp)
         ok = (ls2 == rs) and (not name.endswith(".gz") or gzip_ok(fp))
-        print("%.2f MB  size%s gzip%s" % (ls2 / 2**20, "✓" if ls2 == rs else "✗",
-                                          "✓" if (not name.endswith(".gz") or gzip_ok(fp)) else "✗"))
+        print("%.2f MB  size%s gzip%s" % (ls2 / 2**20, "OK" if ls2 == rs else "FAIL",
+                                          "OK" if (not name.endswith(".gz") or gzip_ok(fp)) else "FAIL"))
     except Exception as e:
         print("failed:", str(e)[:110])
 

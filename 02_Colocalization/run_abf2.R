@@ -75,7 +75,7 @@ for (ek in names(EXPS)) {
                   error = function(x) { printf("   coloc error: %s", conditionMessage(x)); NULL })
     if (is.null(r)) next
     s <- r$summary
-    printf("   n=%-4d flip=%-3d conf=%-3d | H3=%.3g  **H4=%.3f**  leadE=%-12s leadO=%-12s",
+    printf("   n=%-4d flip=%-3d conf=%-3d | H3=%.3g  H4=%.3f  leadE=%-12s leadO=%-12s",
            nrow(m), sum(flip[same | flip]), n_conf,
            s[["PP.H3.abf"]], s[["PP.H4.abf"]],
            m$rsid[which.min(m$p.e)], m$rsid[which.min(m$p.o)])

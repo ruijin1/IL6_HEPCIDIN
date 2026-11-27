@@ -56,7 +56,7 @@ def fetch(url, dst):
                     have = os.path.getsize(dst)
                 except OSError:
                     have = 0
-    print("  complete %s" % ("✓" if os.path.getsize(dst) == total else "incomplete"))
+    print("  complete %s" % ("OK" if os.path.getsize(dst) == total else "incomplete"))
     return os.path.getsize(dst) == total
 
 

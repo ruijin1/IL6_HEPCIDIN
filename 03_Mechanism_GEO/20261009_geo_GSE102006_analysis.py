@@ -164,7 +164,7 @@ def main():
         up = [x for x in ac if x["log2FC"] > 0.3 and x["pair_consist"] == npair]
         print("\n  -- hard validity gate (acute-phase genes with %s concordance and log2FC>0.3) -- %d/%d passed: %s" % (
             npair, len(up), len(ac), ", ".join("%s%+.2f" % (x["gene"], x["log2FC"]) for x in up)))
-        print("     verdict: %s" % ("✓ model active, results are trustworthy" if len(up) >= 3 else "✗ model not active -- results at this time point must not be trusted"))
+        print("     verdict: %s" % ("OK: model active, results are trustworthy" if len(up) >= 3 else "FAIL: model not active -- results at this time point must not be trusted"))
         key = {x["gene"]: x for x in recs}
         for g in ["UGT1A1", "UGT1A6", "UGT1A9", "HMOX1", "HAMP", "CYP3A4", "CYP1A2", "ALB", "IL6", "SOCS3"]:
             if g in key:

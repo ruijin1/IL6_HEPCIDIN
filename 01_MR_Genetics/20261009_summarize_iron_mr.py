@@ -4,7 +4,7 @@ r"""Summarize the IL6R -> iron/erythroid/bilirubin MR and test "direction consis
 Reads `MR_il6r_iron_erythroid_results.csv` and `finngen_lab_locus_scan.csv`.
 
 * Direction logic (must be stated clearly, otherwise it will be read backwards):
-   The effect size of the IL6R cis-pQTL is "**each SD higher sIL6R**".
+   The effect size of the IL6R cis-pQTL is "each SD higher sIL6R".
    High sIL6R = less membrane-bound IL6R = **weaker classical IL-6 signaling** (positive control in this project: IL6R -> CRP is negative, b=-0.115).
    Therefore:
      * If the hepcidin model holds (IL-6 signaling up -> HAMP up -> iron restriction -> erythroid restriction -> heme turnover down -> bilirubin down)

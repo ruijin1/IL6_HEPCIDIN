@@ -198,7 +198,7 @@ def q1():
         s = rr[rr.gene == g]
         if len(s):
             print("    %-8s log2FC=%+.2f  p=%.2g  %s" % (g, s.log2FC.iloc[0], s.p.iloc[0],
-                  "✓ matches KD expectation" if (s.log2FC.iloc[0] < 0 or s.p.iloc[0] < 0.05) else "✗ does not match"))
+                  "OK: matches KD expectation" if (s.log2FC.iloc[0] < 0 or s.p.iloc[0] < 0.05) else "FAIL: does not match"))
     # direction summary
     for blk, names, title in [("bilirubin/heme", ["HMOX1", "HMOX2", "BLVRA", "BLVRB", "ALAS1", "FECH", "UGT1A1",
                                             "UGT1A6", "UGT1A9", "SLCO1B1", "SLCO1B3", "ABCC2", "ABCC3", "ABCG2"], "bilirubin pathway"),

@@ -167,7 +167,7 @@ def analyze(M, contrasts, ctrl, title, mapd=None):
         print("    -- hard validity gate (acute-phase genes require %s concordant upregulation and log2FC>0.5) -- %d/%d passed: %s" % (
             npair, len(up), len(ac), ", ".join("%s%+.2f" % (x["gene"], x["log2FC"]) for x in up)))
         ok = len(up) >= 3
-        print("       verdict: %s" % ("✓ stimulation model active, results are trustworthy" if ok else "✗ model not active -- results from this dataset must not be trusted"))
+        print("       verdict: %s" % ("OK: stimulation model active, results are trustworthy" if ok else "FAIL: model not active -- results from this dataset must not be trusted"))
         key = {x["gene"]: x for x in sub}
         for g in ["UGT1A1", "UGT1A6", "UGT1A9", "HMOX1", "HAMP", "CYP3A4", "CYP1A2", "ALB", "ARNTL", "NR1D1", "IL6", "SOCS3"]:
             if g in key:

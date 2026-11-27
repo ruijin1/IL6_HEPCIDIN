@@ -61,7 +61,7 @@ for name, url in URLS.items():
     fp = os.path.join(DST, name)
     rs = remote_size(url)
     ls = os.path.getsize(fp) if os.path.exists(fp) else 0
-    status = "OK" if (rs and ls == rs) else ("missing" if ls == 0 else "**incomplete / size mismatch**")
+    status = "OK" if (rs and ls == rs) else ("missing" if ls == 0 else "INCOMPLETE / size mismatch")
     print("  %-46s local %9d / remote %9d  %s" % (name, ls, rs, status))
     need = (rs == 0) or (ls != rs)
     if need:
@@ -72,15 +72,15 @@ for name, url in URLS.items():
             ls2 = os.path.getsize(fp)
             gz = gzip_ok(fp) if name.endswith(".gz") else True
             ok = (rs == 0 or ls2 == rs) and gz
-            print("%.2f MB  size%s  gzip%s" % (ls2 / 2**20, "✓" if (rs == 0 or ls2 == rs) else "✗",
-                                               "✓" if gz else "✗"))
+            print("%.2f MB  size%s  gzip%s" % (ls2 / 2**20, "OK" if (rs == 0 or ls2 == rs) else "FAIL",
+                                               "OK" if gz else "FAIL"))
             if not ok:
                 print("      !! still incomplete, please re-run this script")
         except Exception as e:
             print("failed:", str(e)[:120])
     else:
         gz = gzip_ok(fp) if name.endswith(".gz") else True
-        print("      gzip integrity: %s" % ("✓" if gz else "✗ re-download needed"))
+        print("      gzip integrity: %s" % ("OK" if gz else "FAIL: re-download needed"))
 
 print()
 print("Done. Final files:")

@@ -94,7 +94,7 @@ def main():
         hit = [k for k, v in TOOLS.items()
                if len(sub[(sub.position >= v - 2) & (sub.position <= v + 2)]) and
                bool(sub[(sub.position >= v - 2) & (sub.position <= v + 2)].iloc[0]["in_cs"])]
-        print("     -> instrument loci inside the 95%% credible set: %s" % (", ".join(hit) if hit else "**none**"))
+        print("     -> instrument loci inside the 95%% credible set: %s" % (", ".join(hit) if hit else "none found"))
         sub["trait_name"] = name
         rows.append(sub)
     if rows:
