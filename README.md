@@ -5,7 +5,8 @@ Code accompanying the manuscript:
 > **Culture-proven neonatal infection: lower total bilirubin and an erythrocyte signature confined to definite pathogens**
 > Rui Jin, Yaozhi Qi, Xingyu Zhang, Shouhong Yang, Yang Ren and Yan Gao
 
-This repository holds 61 scripts (54 Python, 7 R). The clinical analyses (two neonatal cohorts,
+This repository holds 63 files: 54 analysis Python scripts, 7 analysis R scripts, and 2 utility
+scripts (`md2docx_generic.py`, `run_abf2.R`). The clinical analyses (two neonatal cohorts,
 MIMIC-IV v1.0 and MIMIC-III v1.4) and the hepatocyte transcriptome analyses (GEO) reproduce every
 number, table and figure reported in the current manuscript, including the phototherapy mediation
 decomposition added on 24 November 2026 and the MIMIC-IV within-subject replication added on

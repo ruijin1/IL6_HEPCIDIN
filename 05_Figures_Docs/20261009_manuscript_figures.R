@@ -171,6 +171,9 @@ fig3 <- function() {
 }
 
 ## ------------------------------------------------------------------ Figure 4
+## NOTE (JCM version): this genetic-evidence figure is NOT used in the manuscript
+## (the Mendelian-randomisation layer was removed). Numbering below is historical;
+## see the figure-number mapping table in 00_Code_Index_and_Run_Order.md.
 fig4 <- function() {
   a <- G("fig4A_genetic_forest.csv")
   a$het <- ifelse(a$Q_p < 0.05, "Heterogeneous (not interpreted)", "Homogeneous")
@@ -198,6 +201,7 @@ fig4 <- function() {
 }
 
 ## ------------------------------------------------------------------ Figure 5
+## NOTE (JCM version): this heatmap is manuscript Figure 4 (script number 5 -> Fig. 4).
 fig5 <- function() {
   d <- G("fig5_hepatocyte.csv")
   keep <- c("UGT1A1", "UGT1A6", "UGT1A9", "HAMP", "CYP3A4", "CYP1A2", "ALB", "NR1D1", "CRP", "SOCS3")
@@ -220,6 +224,7 @@ fig5 <- function() {
 }
 
 ## ------------------------------------------------------------------ Figure 6
+## NOTE (JCM version): this two-arm schematic is manuscript Figure 5 (script number 6 -> Fig. 5).
 fig6 <- function() {
   p <- ggplot() + xlim(0, 100) + ylim(0, 60) +
     annotate("text", x = 50, y = 58, size = 3.4, fontface = "bold", label = "Proposed two-arm model of IL-6 effects on bilirubin") +

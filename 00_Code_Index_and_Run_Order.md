@@ -2,7 +2,7 @@
 
 **Project**: IL-6 / hepcidin / bilirubin (clinical databases x hepatocyte transcriptome); Mendelian randomisation and colocalisation retained for audit, not reported in the current manuscript
 **Packaging date**: 2026-10-09
-**Script count**: 60 (Python **53** + R **7**), divided into 5 groups by analysis layer
+**Script count**: 61 analysis scripts (Python **54** + R **7**) plus 2 utility scripts (`md2docx_generic.py`, `run_abf2.R`) — 63 files in total, divided into 5 groups by analysis layer
 
 > This is the English translation of `03_Code/00_代码清单与运行顺序.md` (original Chinese version preserved unchanged). Local working directories were renamed to ASCII equivalents for public release; no analysis logic or numeric value was altered.
 
@@ -193,6 +193,23 @@
 | `20261009_md2docx_generic.py` | Markdown -> Word (generic version), **renders `[TBD: ...]` in bold red** to make gaps easy to locate; outputs the paragraph count / table count / number of TBD spots. **New switch `--numbered`**: centered Arabic page numbers in the footer (PAGE field) + continuous line numbers in the body (`w:lnNumType`, inserted per the OOXML schema after `pgMar` and before `cols`). The manuscript was generated with this switch: <br>`md2docx_generic.py <manuscript.md> <manuscript.docx> --numbered` |
 | **`20261024_figure3_with_CoNS.R`** (new) | * **Fig. 3a redrawn with the CoNS-only exposure as a third group**: identical to `20261009_manuscript_figures.R` except for one extra factor level and one extra colour (`#4D4D4D`). Run as `Rscript 20261024_figure3_with_CoNS.R <figdata dir> <out dir>`; emits 17 x 19 cm PDF plus 600 dpi LZW TIFF — Notes: Reads `fig3A_iron_forest_ascii.csv`; the four CoNS-only rows are produced by the two `20261024_*` scripts rather than by `20261009_figure_data_prep.py`|
 | **Figure input data, 8 CSV** (new) | * **Plotting input for Figures 2-5**, exported as pure-ASCII, BOM-free copies so the R scripts run under any locale: `fig2A_bilirubin_mimic3_ascii.csv`, `fig2B_bilirubin_mimic4_ascii.csv`, `fig3A_iron_forest_ascii.csv`, `fig3B_iron_dose_ascii.csv`, `fig3C_iron_mimiciv_ascii.csv`, `fig4A_genetic_forest_ascii.csv`, `fig4B_hamp_locus_ascii.csv`, `fig5_hepatocyte_ascii.csv` — Notes: With these eight files, `fig2(); fig3(); fig4(); fig5()` in `20261009_manuscript_figures.R` (plus `20261024_figure3_with_CoNS.R` for the original two-panel Fig. 3, and `20261126_figure3_with_mimiciv.R` for the three-panel version that adds panel c) regenerates the published Figures 2-5 **object for object** - identical drawing geometry and identical text on every panel. `fig5_hepatocyte_ascii.csv` also carries the GSE202045 arms for CYP3A4, CYP1A2, ALB and NR1D1 (`log2FC` = mean CPM at 24 h IL-6 minus control), which the original 93-gene panel did not include and which therefore appeared as blank cells in earlier drafts of Fig. 5|
+
+---
+
+## Manuscript Figure Number ↔ Script Output (JCM version, 5 figures)
+
+Script numbering predates the removal of the Mendelian-randomisation layer, so the last two figures are offset by one. Use this table when matching outputs to the manuscript.
+
+| Manuscript figure | Script function | Output file | Note |
+|---|---|---|---|
+| Figure 1 | `fig1()` | `Figure1_study_design` | — |
+| Figure 2 | `fig2()` | `Figure2_bilirubin` | — |
+| Figure 3 | `20261126_figure3_with_mimiciv.R` (preferred) or `fig3()` | `Figure3_iron_erythropoiesis` | Manuscript uses the three-panel version (adds panel c, MIMIC-IV) |
+| Figure 4 | `fig5()` | `Figure5_hepatocyte_systems` | **Script number 5 → manuscript Figure 4** |
+| Figure 5 | `fig6()` | `Figure6_two_arm_model` | **Script number 6 → manuscript Figure 5** |
+| — (not used) | `fig4()` | `Figure4_genetic_evidence` | MR layer removed in the JCM version; this figure does not appear in the manuscript |
+
+`20261009_manuscript_figures.R` calls `fig1()`–`fig6()` in sequence and therefore writes **six** figures. Only the five above are used for submission; rename them according to this table if you need file names that match the manuscript. The statement "regenerates the published Figures 2-5 object for object" earlier in this document refers to drawing geometry, not to the numbering.
 
 ---
 
